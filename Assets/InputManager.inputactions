@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Runing",
+                    "type": "Button",
+                    "id": "70ba7930-6f64-4a5c-b5e1-f8a880c8235d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -123,7 +132,7 @@
                 {
                     "name": "",
                     "id": "b6e6de9c-622d-4a18-9998-47ea6e8a6b4a",
-                    "path": "<XInputController>/buttonSouth",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -145,7 +154,7 @@
                 {
                     "name": "",
                     "id": "e043f59c-a352-460b-870d-8ee28e5293f5",
-                    "path": "<XInputController>/buttonSouth",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -167,11 +176,33 @@
                 {
                     "name": "",
                     "id": "0bce31ee-d3cb-4a5e-9276-10f4362883ba",
-                    "path": "<XInputController>/buttonWest",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6e375fab-b133-415a-a1dd-94e96b7400bf",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Runing",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "33e5386f-bbb7-4bad-8701-7b11a5606419",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Runing",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
