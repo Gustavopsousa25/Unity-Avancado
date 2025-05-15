@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerDashingState : MonoBehaviour
+public class PlayerDashingState : EntityStateBehaviour
 {
     [SerializeField] private InputActionReference DashAction;
 
@@ -13,4 +13,64 @@ public class PlayerDashingState : MonoBehaviour
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
 
+    private CharacterController charController;
+    private bool _animationEnded, _canDash;
+    private Animator anim;
+    private UtilLibrary utilityLib;
+    public override bool Initialize()
+    {
+        charController = GetComponent<CharacterController>();
+        anim = GetComponentInChildren<Animator>();
+        utilityLib = GetComponent<UtilLibrary>();
+        _canDash = true;
+        return charController;
+    }
+
+    public override void OnStateFinish()
+    {
+    }
+
+    public override void OnStateStart()
+    {
+        _animationEnded = false;
+        if (_canDash)
+        {
+            StartCoroutine(DashCoroutine());
+        }
+        return;
+    }
+
+    public override void OnStateUpdate()
+    {
+    }
+
+    public override Type StateTransitionCondicion()
+    {
+        if (_animationEnded)
+        {
+            return typeof(PlayerMovingState);
+        }
+        return null;
+    }
+    IEnumerator DashCoroutine()
+    {
+        _canDash = false;
+        anim.SetTrigger("isDashing");   
+        float timer = 0f;
+        while (timer < dashDuration)
+        {
+            utilityLib.ApplyGravity(charController);
+            charController.Move(transform.forward * dashSpeed * Time.deltaTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(dashCooldown);
+        _canDash = true;
+    }
+    public void EndAnimation()
+    {
+        _animationEnded = true;
+    }
 }
+

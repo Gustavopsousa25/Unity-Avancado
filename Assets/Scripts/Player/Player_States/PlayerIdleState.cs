@@ -5,14 +5,17 @@ using UnityEngine.InputSystem;
 public class PlayerIdleState : EntityStateBehaviour
 {
     [SerializeField] private InputActionReference MovementActionMap;
-    [SerializeField] private InputActionReference JumpActionMap;
+    [SerializeField] private InputActionReference DashActionMap;
+    private UtilLibrary utilityLib;
+    private Animator anim;
     private CharacterController charController;
-    private bool _jumpRequested = false;
     public override bool Initialize()
     {
         MovementActionMap.action.Enable();
-        JumpActionMap.action.Enable();
+        DashActionMap.action.Enable();
         charController = GetComponent<CharacterController>();
+        anim = GetComponentInChildren<Animator>();
+        utilityLib = GetComponent<UtilLibrary>();
         return MovementActionMap != null;
     }
 
@@ -24,32 +27,24 @@ public class PlayerIdleState : EntityStateBehaviour
     public override void OnStateStart()
     {
         Debug.Log("Idle State Initialize");
-        JumpActionMap.action.performed += OnJumpPerformed;
+        anim.SetFloat("Walkspeed", 0f);
     }
 
     public override void OnStateUpdate()
     {
-     
+        utilityLib.ApplyGravity(charController);
     }
 
     public override Type StateTransitionCondicion()
     {
-        Debug.Log($"[Idle] Checking transition: _jumpRequested={_jumpRequested}, grounded={charController.isGrounded}");
         if (MovementActionMap.action.triggered)
         {
             return typeof(PlayerMovingState);
-        }
-        if(JumpActionMap.action.triggered && charController.isGrounded)
+        } 
+        else if (DashActionMap.action.triggered)
         {
-            Debug.Log("[Idle] → Jumping!");
-            _jumpRequested = false;
-            return typeof(PlayerJumpingState);
+            return typeof (PlayerDashingState);
         }
         return null;
-    }
-    private void OnJumpPerformed(InputAction.CallbackContext ctx)
-    {
-        _jumpRequested = true;
-        Debug.Log($"[Idle] OnJumpPerformed! grounded? {charController.isGrounded}");
     }
 }

@@ -1,18 +1,37 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttackingState : MonoBehaviour
+public class PlayerAttackingState : EntityStateBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private float _speed;
+    [SerializeField] private float _range;
+
+    private CharacterController charController;
+    public override bool Initialize()
     {
-        
+        charController = GetComponent<CharacterController>();
+        return charController;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnStateFinish()
     {
-        
+        throw new NotImplementedException();
+    }
+
+    public override void OnStateStart()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnStateUpdate()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Type StateTransitionCondicion()
+    {
+        throw new NotImplementedException();
     }
 }
