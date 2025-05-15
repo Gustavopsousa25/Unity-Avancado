@@ -32,12 +32,8 @@ public class PlayerDashingState : EntityStateBehaviour
 
     public override void OnStateStart()
     {
-        _animationEnded = false;
-        if (_canDash)
-        {
-            StartCoroutine(DashCoroutine());
-        }
-        return;
+        DashAction.action.performed += OnDashperformed;
+  
     }
 
     public override void OnStateUpdate()
@@ -52,6 +48,14 @@ public class PlayerDashingState : EntityStateBehaviour
         }
         return null;
     }
+    public void OnDashperformed(InputAction.CallbackContext context)
+    {
+        _animationEnded = false;
+        if (_canDash)
+        {
+            StartCoroutine(DashCoroutine());
+        }
+    }
     IEnumerator DashCoroutine()
     {
         _canDash = false;
@@ -63,8 +67,7 @@ public class PlayerDashingState : EntityStateBehaviour
             charController.Move(transform.forward * dashSpeed * Time.deltaTime);
             timer += Time.deltaTime;
             yield return null;
-        }
-
+        } 
         yield return new WaitForSeconds(dashCooldown);
         _canDash = true;
     }

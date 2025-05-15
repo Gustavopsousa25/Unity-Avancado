@@ -16,13 +16,16 @@ public class PlayerMovingState : EntityStateBehaviour
     [SerializeField] private float _sprintMult;
     [Header("Jump")]
     [SerializeField] private float _JumpHeight, _jumpCooldown;
-
+    [Header("Dash")]
+    [SerializeField] private float dashSpeed = 20f;
+    [SerializeField] private float dashDuration = 0.2f;
+    [SerializeField] private float dashCooldown = 1f;
     private CharacterController charController;
     private Animator anim;
     private UtilLibrary utilityLib;
     private Vector2 _move;
     private float _currentSpeed, VerticalVelocity;
-    private bool _canJump;
+    private bool _canJump = true, _canDash = true, _canMove = true;
     public override bool Initialize()
     {
         MovementAction.action.Enable();
@@ -45,18 +48,22 @@ public class PlayerMovingState : EntityStateBehaviour
         Debug.Log("Movement State Initialized");
         _currentSpeed = _movementSpeed;
         VerticalVelocity = utilityLib.VerticalVelocity;
-        _canJump = true;
         MovementAction.action.performed += OnMovePerformed;
         MovementAction.action.canceled += OnMoveCancelled;
         RunningAction.action.started += OnRunningPerformed;
         RunningAction.action.canceled += OnRunningPerformed;
-        JumpAction.action.performed += OnJumpPerformed;
+        DashActionMap.action.performed += OnDashPerformed;
+        DashActionMap.action.canceled += OnDashPerformed;
+        //JumpAction.action.performed += OnJumpPerformed;
     }
 
     public override void OnStateUpdate()
     {
-        MoveInDirection(_currentSpeed);
-        anim.SetFloat("Walkspeed", MathF.Abs(_currentSpeed));
+        if (_canMove)
+        {
+            MoveInDirection(_currentSpeed);
+            anim.SetFloat("Walkspeed", MathF.Abs(_currentSpeed));
+        }        
         utilityLib.ApplyGravity(charController);
     }
 
@@ -65,10 +72,6 @@ public class PlayerMovingState : EntityStateBehaviour
         if (charController.velocity == Vector3.zero)
         {
            return typeof(PlayerIdleState);
-        }
-        else if (DashActionMap.action.triggered)
-        {
-            return typeof(PlayerDashingState);
         }
         return null;
     }
@@ -81,14 +84,14 @@ public class PlayerMovingState : EntityStateBehaviour
     {
         _move = Vector2.zero;
     }
-    public void OnJumpPerformed(InputAction.CallbackContext context)
+    /*public void OnJumpPerformed(InputAction.CallbackContext context)
     {
         if (charController.isGrounded && _canJump)
         {
             anim.SetTrigger("isJumping");
             StartCoroutine(JumpRoutine());
         }
-    }
+    }*/
     public void OnRunningPerformed(InputAction.CallbackContext context)
     {
 
@@ -102,6 +105,14 @@ public class PlayerMovingState : EntityStateBehaviour
         }
         Debug.Log(_currentSpeed);
     }
+    public void OnDashPerformed(InputAction.CallbackContext context)
+    {
+        if (context.performed && _canDash)
+        {
+            StartCoroutine(DashCoroutine());
+        }
+        
+    }
 
     private void MoveInDirection(float movementSpeed)
     {
@@ -114,12 +125,28 @@ public class PlayerMovingState : EntityStateBehaviour
         Vector3 newDirection = new Vector3(finalMove.x, 0, finalMove.z);
         utilityLib.FaceDirection(newDirection);
     }
-    IEnumerator JumpRoutine()
+    /*IEnumerator JumpRoutine()
     {        
         _canJump = false;
         utilityLib.VerticalVelocity = Mathf.Sqrt(_JumpHeight * -2f * Physics.gravity.y);
         yield return new WaitForSeconds(_jumpCooldown);
         anim.SetTrigger("isFalling");
         _canJump = true;
+    }*/
+    IEnumerator DashCoroutine()
+    {
+        _canDash = false;
+        anim.SetTrigger("isDashing");
+        float timer = 0f;
+        while (timer < dashDuration)
+        {
+            _canMove = false;
+            charController.Move(transform.forward * dashSpeed * Time.deltaTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        _canMove = true;
+        yield return new WaitForSeconds(dashCooldown);
+        _canDash = true;
     }
 }

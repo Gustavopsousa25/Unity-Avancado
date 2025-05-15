@@ -188,7 +188,7 @@
                     "name": "",
                     "id": "6e375fab-b133-415a-a1dd-94e96b7400bf",
                     "path": "<Keyboard>/shift",
-                    "interactions": "Hold",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Runing",
