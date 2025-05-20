@@ -25,7 +25,7 @@ public class PlayerMovingState : EntityStateBehaviour
     private UtilLibrary utilityLib;
     private Vector2 _move;
     private float _currentSpeed, VerticalVelocity;
-    private bool _canJump = true, _canDash = true, _canMove = true;
+    private bool /*_canJump = true ,*/ _canDash = true, _canMove = true;
     public override bool Initialize()
     {
         MovementAction.action.Enable();

@@ -8,7 +8,7 @@ public class EnemieWandering : EntityStateBehaviour
 {
     [SerializeField] private POIManager PatrolPath;
     [SerializeField] private float moveSpeed = 2f;
-    [SerializeField] private UnityEvent OnDestinationReached;
+    private Action OnDestinationReached;
     private ConeOfSight ConeOfSightComponent ;
     private NavMeshAgent agent ;
     private Animator anim;
@@ -23,14 +23,14 @@ public class EnemieWandering : EntityStateBehaviour
         agent.isStopped = false;
         agent.speed = MoveSpeed;
         anim.SetFloat("Walkspeed", MathF.Abs(MoveSpeed));
-        Destination = PatrolPath.GetPOIAtIndex(POIIndex++).position;
+        Destination = PatrolPath.GetPOIAtIndex(POIIndex++);
         if (!PatrolPath.IsIndexValid(POIIndex))
         {
             POIIndex = 0;
         }
         transform.LookAt(Destination);
         agent.SetDestination(Destination);
-        OnDestinationReached.AddListener(PatrolPath.RandomizeAllPoints);
+        OnDestinationReached += () => PatrolPath.RandomizeAllPoints();
     }
 
     public override void OnStateUpdate()
@@ -42,6 +42,7 @@ public class EnemieWandering : EntityStateBehaviour
         agent.isStopped = true;
         anim.SetFloat("Walkspeed", 0);
         OnDestinationReached?.Invoke();
+        OnDestinationReached -= () => PatrolPath.RandomizeAllPoints();
     }
     public override bool Initialize()
     {
