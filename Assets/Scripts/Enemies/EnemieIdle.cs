@@ -1,18 +1,53 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemieIdle : MonoBehaviour
+public class EnemieIdle : EntityStateBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private float minWaitTime, maxWaitTime;
+    private ConeOfSight coneOfSightComponent;
+
+    private Coroutine waitTimeRoutine;
+
+    public override bool Initialize()
     {
-        
+        coneOfSightComponent = GetComponent<ConeOfSight>();
+        return coneOfSightComponent;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnStateFinish()
     {
-        
+        if(waitTimeRoutine != null)
+        {
+            StopCoroutine(waitTimeRoutine);
+        }
+    }
+
+    public override void OnStateStart()
+    {
+        waitTimeRoutine = StartCoroutine(WaitForTimeAndSwitchState());
+    }
+
+    public override void OnStateUpdate()
+    {
+       // throw new NotImplementedException();
+    }
+
+    public override Type StateTransitionCondicion()
+    {
+        if(coneOfSightComponent != null && coneOfSightComponent.HasSeenPlayerThisFrame())
+        {
+            return typeof(EnemieChasing);
+        }
+        return null;
+    }
+    private IEnumerator WaitForTimeAndSwitchState()
+    {
+        float time = UnityEngine.Random.Range(minWaitTime, maxWaitTime);
+
+        yield return new WaitForSeconds(time);
+
+        AssociatedStateMachine.SetState(typeof(EnemieWandering));
     }
 }

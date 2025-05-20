@@ -103,7 +103,6 @@ public class PlayerMovingState : EntityStateBehaviour
         {
             _currentSpeed = _movementSpeed;
         }
-        Debug.Log(_currentSpeed);
     }
     public void OnDashPerformed(InputAction.CallbackContext context)
     {

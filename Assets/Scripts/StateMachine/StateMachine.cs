@@ -10,7 +10,7 @@ public class StateMachine : MonoBehaviour
     [SerializeField] protected bool shearchChildren;
 
     // Dictionary of state behaviours
-    [SerializeField] private Dictionary<Type, EntityStateBehaviour> StateBehaviour = new Dictionary<Type, EntityStateBehaviour>();
+    private Dictionary<Type, EntityStateBehaviour> StateBehaviour = new Dictionary<Type, EntityStateBehaviour>();
     
     //tracks the current state running in the StateBehaviour
     private EntityStateBehaviour currentState = null;
@@ -90,9 +90,10 @@ public class StateMachine : MonoBehaviour
         if (IsValidNewStateIndex(InitialTypeSetup))
         {
             currentState = StateBehaviour[InitialTypeSetup];
-            currentState.Initialize();
+            currentState.OnStateStart();
             return;
         }
+        Debug.Log($"StateMachine On {gameObject.name} is has no state behaviours associated with it!");
     }
     public void SetState(Type StateKey)
     {
