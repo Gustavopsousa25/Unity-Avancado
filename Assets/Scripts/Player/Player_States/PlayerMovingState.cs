@@ -6,10 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovingState : EntityStateBehaviour
 {
-    [SerializeField] private InputActionReference MovementAction;
-    [SerializeField] private InputActionReference RunningAction;
-    [SerializeField] private InputActionReference DashActionMap;
-    [SerializeField] private InputActionReference JumpAction;
+    [SerializeField] private InputActionReference MovementAction, RunningAction, DashActionMap, JumpAction, AttackActionMap;
 
     [Header("Movement Settings")]
     [SerializeField] private float _movementSpeed;
@@ -73,6 +70,10 @@ public class PlayerMovingState : EntityStateBehaviour
         {
            return typeof(PlayerIdleState);
         }
+        else if (AttackActionMap.action.phase == InputActionPhase.Started)
+        {
+            return typeof(PlayerAttackingState);
+        }
         return null;
     }
 
@@ -109,8 +110,7 @@ public class PlayerMovingState : EntityStateBehaviour
         if (context.performed && _canDash)
         {
             StartCoroutine(DashCoroutine());
-        }
-        
+        }       
     }
 
     private void MoveInDirection(float movementSpeed)

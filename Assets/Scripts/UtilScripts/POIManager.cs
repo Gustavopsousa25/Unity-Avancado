@@ -47,8 +47,7 @@ public class POIManager : MonoBehaviour
         // pick a distance between inner and outer radius
         float distance = Random.Range(innerRadius, outerRadius);
         // build the final position
-        Vector3 offset = new Vector3(newpointPosition.x, 0f, newpointPosition.y);
-        Debug.Log("NewPoint: "+ newpointPosition+ "Final Position: "+ offset);
+        Vector3 offset = new Vector3(newpointPosition.x, 0f, newpointPosition.y);  
         return offset;
     }
 

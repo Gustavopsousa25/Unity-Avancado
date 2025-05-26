@@ -5,13 +5,22 @@ using UnityEngine.Events;
 
 public class AnimationEvent : MonoBehaviour
 {
-    public UnityEvent damageEvent, animFinishedEvent;
-    public void DamageEvent()
+
+    public UnityEvent onDamageStart, onDamageEnd, animFinishedEvent;
+    public void StartDamagePeriod()
     {
-        damageEvent?.Invoke();
+        onDamageStart?.Invoke();
+    }
+
+    public void EndDamagePeriod()
+    {
+        onDamageEnd?.Invoke();
     }
     public void animationFinished()
     {
+
         animFinishedEvent?.Invoke();
+
     }
+
 }

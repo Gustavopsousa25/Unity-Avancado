@@ -4,8 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerIdleState : EntityStateBehaviour
 {
-    [SerializeField] private InputActionReference MovementActionMap;
-    [SerializeField] private InputActionReference DashActionMap;
+    [SerializeField] private InputActionReference MovementActionMap, DashActionMap, AttackActionMap;
     private UtilLibrary utilityLib;
     private Animator anim;
     private CharacterController charController;
@@ -21,7 +20,6 @@ public class PlayerIdleState : EntityStateBehaviour
 
     public override void OnStateFinish()
     {
-        
     }
 
     public override void OnStateStart()
@@ -37,13 +35,17 @@ public class PlayerIdleState : EntityStateBehaviour
 
     public override Type StateTransitionCondicion()
     {
-        if (MovementActionMap.action.triggered)
+        if (MovementActionMap.action.phase == InputActionPhase.Started)
         {
             return typeof(PlayerMovingState);
         } 
-        else if (DashActionMap.action.triggered)
+        else if (DashActionMap.action.phase == InputActionPhase.Started)
         {
             return typeof (PlayerDashingState);
+        }
+        else if(AttackActionMap.action.phase == InputActionPhase.Started)
+        {
+            return typeof(PlayerAttackingState);
         }
         return null;
     }
