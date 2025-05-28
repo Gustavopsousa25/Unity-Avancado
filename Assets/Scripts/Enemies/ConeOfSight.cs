@@ -31,14 +31,14 @@ public class ConeOfSight : MonoBehaviour
         Vector3 toPlayer = targetTransform.position - transform.position;
         float distanceToPlayer = toPlayer.magnitude;
 
-        // 1) Range check
+        // Range check
         if (distanceToPlayer > viewRange)
         {
             hasSeenPlayer = false;
             return;
         }
 
-        // 2) Angle check
+        // Angle check
         Vector3 dirNorm = toPlayer.normalized;
         float angleToPlayer = Vector3.Angle(transform.forward, dirNorm);
         if (angleToPlayer > viewAngle)
@@ -47,12 +47,11 @@ public class ConeOfSight : MonoBehaviour
             return;
         }
 
-        // 3) Line-of-sight check
+        // Line-of-sight check
         Ray ray = new Ray(transform.position, dirNorm);
         Debug.DrawRay(ray.origin, ray.direction * viewRange, Color.red, 0.1f);
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, viewRange) &&
-            hitInfo.collider.GetComponent<PlayerMovingState>())
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, viewRange) && hitInfo.collider.GetComponent<PlayerMovingState>())
         {
             hasSeenPlayer = true;
             return;

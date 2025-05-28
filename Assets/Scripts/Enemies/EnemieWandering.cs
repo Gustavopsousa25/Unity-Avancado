@@ -9,8 +9,8 @@ public class EnemieWandering : EntityStateBehaviour
     [SerializeField] private POIManager PatrolPath;
     [SerializeField] private float moveSpeed = 2f;
     private Action OnDestinationReached;
-    private ConeOfSight ConeOfSightComponent ;
-    private NavMeshAgent agent ;
+    private ConeOfSight coneOfSightComponent ;
+    private NavMeshAgent agent;
     private Animator anim;
     private Vector3 Destination = Vector3.zero;
 
@@ -20,6 +20,7 @@ public class EnemieWandering : EntityStateBehaviour
 
     public override void OnStateStart()
     {
+        coneOfSightComponent.enabled = true;
         agent.isStopped = false;
         agent.speed = MoveSpeed;
         anim.SetFloat("Walkspeed", MathF.Abs(MoveSpeed));
@@ -47,9 +48,9 @@ public class EnemieWandering : EntityStateBehaviour
     public override bool Initialize()
     {
         agent = GetComponent<NavMeshAgent>();
-        ConeOfSightComponent = GetComponent<ConeOfSight>();
+        coneOfSightComponent = GetComponent<ConeOfSight>();
         anim = GetComponentInChildren<Animator>();
-        return agent != null && ConeOfSightComponent != null && PatrolPath != null;
+        return agent != null && coneOfSightComponent != null && PatrolPath != null;
     }
 
     public override Type StateTransitionCondicion()
@@ -59,7 +60,7 @@ public class EnemieWandering : EntityStateBehaviour
             return typeof(EnemieIdle);
         }
 
-        if (ConeOfSightComponent && ConeOfSightComponent.HasSeenPlayerThisFrame())
+        if (coneOfSightComponent && coneOfSightComponent.HasSeenPlayerThisFrame())
         {
             return typeof(EnemieChasing);
         }

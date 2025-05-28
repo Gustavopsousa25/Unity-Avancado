@@ -12,6 +12,7 @@ public class PlayerIdleState : EntityStateBehaviour
     {
         MovementActionMap.action.Enable();
         DashActionMap.action.Enable();
+        AttackActionMap.action.Enable();
         charController = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
         utilityLib = GetComponent<UtilLibrary>();
@@ -24,7 +25,6 @@ public class PlayerIdleState : EntityStateBehaviour
 
     public override void OnStateStart()
     {
-        Debug.Log("Idle State Initialize");
         anim.SetFloat("Walkspeed", 0f);
     }
 
@@ -41,9 +41,10 @@ public class PlayerIdleState : EntityStateBehaviour
         } 
         else if (DashActionMap.action.phase == InputActionPhase.Started)
         {
+
             return typeof (PlayerDashingState);
         }
-        else if(AttackActionMap.action.phase == InputActionPhase.Started)
+        if(AttackActionMap.action.triggered)
         {
             return typeof(PlayerAttackingState);
         }

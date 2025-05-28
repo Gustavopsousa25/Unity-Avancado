@@ -28,7 +28,8 @@ public class PlayerMovingState : EntityStateBehaviour
         MovementAction.action.Enable();
         RunningAction.action.Enable();
         DashActionMap.action.Enable();
-        JumpAction.action.Enable();
+        AttackActionMap.action.Enable();
+        //JumpAction.action.Enable();
         charController = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
         utilityLib = GetComponent<UtilLibrary>();
@@ -51,6 +52,8 @@ public class PlayerMovingState : EntityStateBehaviour
         RunningAction.action.canceled += OnRunningPerformed;
         DashActionMap.action.performed += OnDashPerformed;
         DashActionMap.action.canceled += OnDashPerformed;
+        AttackActionMap.action.started += OnAttackPerformed;
+        AttackActionMap.action.started -= OnAttackPerformed;
         //JumpAction.action.performed += OnJumpPerformed;
     }
 
@@ -70,7 +73,7 @@ public class PlayerMovingState : EntityStateBehaviour
         {
            return typeof(PlayerIdleState);
         }
-        else if (AttackActionMap.action.phase == InputActionPhase.Started)
+        if (AttackActionMap.action.triggered)
         {
             return typeof(PlayerAttackingState);
         }
@@ -112,7 +115,10 @@ public class PlayerMovingState : EntityStateBehaviour
             StartCoroutine(DashCoroutine());
         }       
     }
-
+    public void OnAttackPerformed(InputAction.CallbackContext context)
+    {
+        AssociatedStateMachine.SetState(typeof (PlayerAttackingState));
+    }
     private void MoveInDirection(float movementSpeed)
     {
         Vector3 horizontal = new Vector3(_move.x, 0, _move.y).normalized * movementSpeed;

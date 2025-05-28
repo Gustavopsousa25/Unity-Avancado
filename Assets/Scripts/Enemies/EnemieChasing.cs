@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class EnemieChasing : EntityStateBehaviour
 {
-    [SerializeField] private float moveSpeedMult;
+    [SerializeField] private float moveSpeedMult, attackRange;
     private Transform target;
     private NavMeshAgent agent;
     private Animator anim;
@@ -31,6 +31,7 @@ public class EnemieChasing : EntityStateBehaviour
 
     public override void OnStateStart()
     {
+        coneOfSightComponent.enabled = true;   
         float ChasingMoveSpeed = WalkingMoveSpeed * moveSpeedMult;
         agent.isStopped = false;
         agent.speed = ChasingMoveSpeed;
@@ -58,9 +59,17 @@ public class EnemieChasing : EntityStateBehaviour
         }
         return null;
     }
-
+    private bool TargetInRange()
+    {
+        Vector3 ray = transform.position;
+        return false;
+    }
     private void ChasePlayer()
     {
         agent.SetDestination(target.position);
+    }
+    private void OnDrawGizmos()
+    {
+        Debug.DrawLine(transform.position, new Vector3(), Color.green);
     }
 }
