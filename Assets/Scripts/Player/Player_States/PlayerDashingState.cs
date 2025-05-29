@@ -26,11 +26,11 @@ public class PlayerDashingState : EntityStateBehaviour
         return charController;
     }
 
-    public override void OnStateFinish()
+    public void OnDisable()
     {
     }
 
-    public override void OnStateStart()
+    public void OnEnable()
     {
         DashAction.action.performed += OnDashperformed;
   
@@ -63,7 +63,6 @@ public class PlayerDashingState : EntityStateBehaviour
         float timer = 0f;
         while (timer < dashDuration)
         {
-            utilityLib.ApplyGravity(charController);
             charController.Move(transform.forward * dashSpeed * Time.deltaTime);
             timer += Time.deltaTime;
             yield return null;
@@ -74,6 +73,11 @@ public class PlayerDashingState : EntityStateBehaviour
     public void EndAnimation()
     {
         _animationEnded = true;
+    }
+
+    public override void OnStateFixedUpdate()
+    {
+        throw new NotImplementedException();
     }
 }
 

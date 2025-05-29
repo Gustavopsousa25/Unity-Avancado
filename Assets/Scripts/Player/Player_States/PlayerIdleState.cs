@@ -19,18 +19,21 @@ public class PlayerIdleState : EntityStateBehaviour
         return MovementActionMap != null;
     }
 
-    public override void OnStateFinish()
+    public void OnDisable()
     {
     }
 
-    public override void OnStateStart()
+    public override void OnStateFixedUpdate()
+    {
+    }
+
+    public void OnEnable()
     {
         anim.SetFloat("Walkspeed", 0f);
     }
 
     public override void OnStateUpdate()
     {
-        utilityLib.ApplyGravity(charController);
     }
 
     public override Type StateTransitionCondicion()

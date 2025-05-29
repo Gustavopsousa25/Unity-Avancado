@@ -10,28 +10,27 @@ public class PlayerAttackingState : EntityStateBehaviour
     [SerializeField] private float pushDistance;
     private Collider weaponCollider;
     private bool attackEnded = false;
-    private CharacterController charController;
-    private StateMachine playerStateMachine;
+    private Rigidbody charRB;
     private Animator anim;
     public override bool Initialize()
     {
-        charController = GetComponent<CharacterController>();
+        charRB = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
-        playerStateMachine = GetComponent<StateMachine>();
         weaponCollider = weapon.GetComponent<Collider>();   
-        return charController;
+        return charRB;
     }
 
-    public override void OnStateFinish()
+    public void OnDisable()
     {
         //attackInput.action.performed -= OnAttack;
         //AssociatedStateMachine.SetState(typeof (PlayerMovingState));
     }
 
-    public override void OnStateStart()
+    public void OnEnable()
     {
-        //attackInput.action.performed += OnAttack;
         attackEnded = false;
+        //attackInput.action.performed += OnAttack;
+        charRB.velocity = Vector3.zero;
         anim.SetTrigger("isAttacking");
     }
 
@@ -53,7 +52,7 @@ public class PlayerAttackingState : EntityStateBehaviour
     }*/
     public void PushPlayer()
     {
-        //charController.Move(trasform.position = (transform.forward + 1));
+        //charRB.AddForce(transform.forward * pushDistance, ForceMode.Impulse);
     }
     public void StartAttackPeriod()
     {
@@ -67,7 +66,12 @@ public class PlayerAttackingState : EntityStateBehaviour
     }
     public void AttackEnded()
     {
-        attackEnded = true;
-        //AssociatedStateMachine.SetState(typeof(PlayerMovingState));
+        print("AttackEnded");
+        AssociatedStateMachine.SetState(typeof(PlayerMovingState));
+
+    }
+
+    public override void OnStateFixedUpdate()
+    {
     }
 }

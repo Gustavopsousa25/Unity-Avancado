@@ -12,7 +12,7 @@ public class StateMachineEditor : Editor
     {
         StateMachine StateMachineTargetComponent = (StateMachine) target;
 
-        //DrawDefaultInspector();
+        DrawDefaultInspector();
 
         // Linq is the king of trash generation, so let's avoid it
         //IEnumerable<AStateBehaviour> GetAll()

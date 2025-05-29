@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class StateMachine : MonoBehaviour
@@ -8,6 +9,7 @@ public class StateMachine : MonoBehaviour
     [SerializeField] protected internal string initalStateNameType = "";
     [SerializeField] public string initialStateNameTypeV2 = "";
     [SerializeField] protected bool shearchChildren;
+    [SerializeField] private TextMeshProUGUI stateText;
 
     // Dictionary of state behaviours
     private Dictionary<Type, EntityStateBehaviour> StateBehaviour = new Dictionary<Type, EntityStateBehaviour>();
@@ -72,12 +74,19 @@ public class StateMachine : MonoBehaviour
         Type newState = currentState.StateTransitionCondicion();
         if (IsValidNewStateIndex(newState))
         {
-            currentState.OnStateFinish();
+            if(stateText!=null)
+            stateText.text = newState.ToString();
+
+            currentState.enabled = false;
             currentState = StateBehaviour[newState];
-            currentState.OnStateStart();
+            currentState.enabled = true;
         }
     }
- 
+    private void FixedUpdate()
+    {
+        currentState.OnStateFixedUpdate();
+    }
+
     // Function To help See If States Are The Same, Unused at the moment
     public bool IsCurrentState(EntityStateBehaviour stateBehaviour)
     {
@@ -90,7 +99,7 @@ public class StateMachine : MonoBehaviour
         if (IsValidNewStateIndex(InitialTypeSetup))
         {
             currentState = StateBehaviour[InitialTypeSetup];
-            currentState.OnStateStart();
+            currentState.enabled=true;
             return;
         }
         Debug.Log($"StateMachine On {gameObject.name} is has no state behaviours associated with it!");
@@ -99,9 +108,9 @@ public class StateMachine : MonoBehaviour
     {
         if (IsValidNewStateIndex(StateKey))
         {
-            currentState.OnStateFinish();
+            currentState.enabled = false;
             currentState = StateBehaviour[StateKey];
-            currentState.OnStateStart();
+            currentState.enabled = true;
         }
     }
     // Verify if the Index is Valid

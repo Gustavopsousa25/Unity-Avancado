@@ -23,13 +23,17 @@ public class EnemieChasing : EntityStateBehaviour
         return target && agent;
     }
 
-    public override void OnStateFinish()
+    public  void OnDisable()
     {
         agent.isStopped = true;
         anim.SetFloat("Walkspeed", MathF.Abs(0));
     }
 
-    public override void OnStateStart()
+    public override void OnStateFixedUpdate()
+    {
+    }
+
+    public void OnEnable()
     {
         coneOfSightComponent.enabled = true;   
         float ChasingMoveSpeed = WalkingMoveSpeed * moveSpeedMult;
@@ -47,7 +51,7 @@ public class EnemieChasing : EntityStateBehaviour
 
             if(Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, attackRange))
             {
-                if (hit.collider.gameObject == target)
+                if (hit.collider.gameObject.GetComponent<PlayerMovingState>())
                 {
                     AssociatedStateMachine.SetState(typeof (EnemieAttacking));
                 }
@@ -71,7 +75,7 @@ public class EnemieChasing : EntityStateBehaviour
     {
         agent.SetDestination(target.position);
     }
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Debug.DrawLine(transform.position, transform.position + transform.forward * attackRange, Color.green);
     }

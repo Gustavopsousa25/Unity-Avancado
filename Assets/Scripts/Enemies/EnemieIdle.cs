@@ -16,7 +16,7 @@ public class EnemieIdle : EntityStateBehaviour
         return coneOfSightComponent;
     }
 
-    public override void OnStateFinish()
+    public void OnDisable()
     {
         if(waitTimeRoutine != null)
         {
@@ -24,7 +24,11 @@ public class EnemieIdle : EntityStateBehaviour
         }
     }
 
-    public override void OnStateStart()
+    public override void OnStateFixedUpdate()
+    {
+    }
+
+    public void OnEnable()
     {
         waitTimeRoutine = StartCoroutine(WaitForTimeAndSwitchState());
     }

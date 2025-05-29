@@ -18,7 +18,7 @@ public class EnemieWandering : EntityStateBehaviour
 
     public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
 
-    public override void OnStateStart()
+    public void OnEnable()
     {
         coneOfSightComponent.enabled = true;
         agent.isStopped = false;
@@ -38,7 +38,7 @@ public class EnemieWandering : EntityStateBehaviour
     {
     }
 
-    public override void OnStateFinish()
+    public void OnDisable()
     {
         agent.isStopped = true;
         anim.SetFloat("Walkspeed", 0);
@@ -66,5 +66,10 @@ public class EnemieWandering : EntityStateBehaviour
         }
 
         return null;
+    }
+
+    public override void OnStateFixedUpdate()
+    {
+
     }
 }

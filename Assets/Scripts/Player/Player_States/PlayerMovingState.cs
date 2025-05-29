@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,12 +18,14 @@ public class PlayerMovingState : EntityStateBehaviour
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
-    private CharacterController charController;
+    private Rigidbody charRB;
     private Animator anim;
     private UtilLibrary utilityLib;
     private Vector2 _move;
     private float _currentSpeed, VerticalVelocity;
     private bool /*_canJump = true ,*/ _canDash = true, _canMove = true;
+
+    Vector3 move;
     public override bool Initialize()
     {
         MovementAction.action.Enable();
@@ -30,18 +33,25 @@ public class PlayerMovingState : EntityStateBehaviour
         DashActionMap.action.Enable();
         AttackActionMap.action.Enable();
         //JumpAction.action.Enable();
-        charController = GetComponent<CharacterController>();
+        charRB = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
         utilityLib = GetComponent<UtilLibrary>();
-        return charController && anim && utilityLib;
+        return charRB && anim && utilityLib;
     }
 
-    public override void OnStateFinish()
+    public void OnDisable()
     {
-       
+        MovementAction.action.performed -= OnMovePerformed;
+        MovementAction.action.canceled -= OnMoveCancelled;
+        RunningAction.action.started -= OnRunningPerformed;
+        RunningAction.action.canceled -= OnRunningPerformed;
+        DashActionMap.action.performed -= OnDashPerformed;
+        DashActionMap.action.canceled -= OnDashPerformed;
+        AttackActionMap.action.started -= OnAttackPerformed;
+        AttackActionMap.action.canceled -= OnAttackPerformed;
     }
 
-    public override void OnStateStart()
+    public void OnEnable()
     {
         Debug.Log("Movement State Initialized");
         _currentSpeed = _movementSpeed;
@@ -53,7 +63,7 @@ public class PlayerMovingState : EntityStateBehaviour
         DashActionMap.action.performed += OnDashPerformed;
         DashActionMap.action.canceled += OnDashPerformed;
         AttackActionMap.action.started += OnAttackPerformed;
-        AttackActionMap.action.started -= OnAttackPerformed;
+        AttackActionMap.action.canceled += OnAttackPerformed;
         //JumpAction.action.performed += OnJumpPerformed;
     }
 
@@ -64,12 +74,32 @@ public class PlayerMovingState : EntityStateBehaviour
             MoveInDirection(_currentSpeed);
             anim.SetFloat("Walkspeed", MathF.Abs(_currentSpeed));
         }        
-        utilityLib.ApplyGravity(charController);
+    }
+    public override void OnStateFixedUpdate()
+    {
+        // Calculate movement direction
+        Vector3 moveDirection = move.normalized;
+
+        // Only apply movement if input is present
+        if (moveDirection.magnitude > 0f)
+        {
+            // Set velocity directly to move at fixed speed
+            Vector3 velocity = moveDirection * _movementSpeed;
+            charRB.velocity = new Vector3(velocity.x, charRB.velocity.y, velocity.z);
+
+            // Face movement direction (ignore vertical)
+            utilityLib.FaceDirection(new Vector3(move.x, 0, move.z));
+        }
+        else
+        {
+            // No input – stop horizontal movement completely
+            charRB.velocity = new Vector3(0f, charRB.velocity.y, 0f);
+        }
     }
 
     public override Type StateTransitionCondicion()
     {
-        if (charController.velocity == Vector3.zero)
+        if (_move == Vector2.zero)
         {
            return typeof(PlayerIdleState);
         }
@@ -87,6 +117,7 @@ public class PlayerMovingState : EntityStateBehaviour
     public void OnMoveCancelled(InputAction.CallbackContext context)
     {
         _move = Vector2.zero;
+        move = Vector3.zero;
     }
     /*public void OnJumpPerformed(InputAction.CallbackContext context)
     {
@@ -98,22 +129,22 @@ public class PlayerMovingState : EntityStateBehaviour
     }*/
     public void OnRunningPerformed(InputAction.CallbackContext context)
     {
-
-        if (context.started)
-        {
-            _currentSpeed = _movementSpeed * _sprintMult;
-        }
-        else if (context.canceled)
-        {
-            _currentSpeed = _movementSpeed;
-        }
+        _currentSpeed = _movementSpeed * _sprintMult;
     }
+    public void OnRunningCancelled(InputAction.CallbackContext context)
+    {
+        _currentSpeed = _movementSpeed;
+    }
+
     public void OnDashPerformed(InputAction.CallbackContext context)
     {
         if (context.performed && _canDash)
         {
             StartCoroutine(DashCoroutine());
         }       
+    }
+    public void OnDashCancelled(InputAction.CallbackContext context)
+    {
     }
     public void OnAttackPerformed(InputAction.CallbackContext context)
     {
@@ -123,13 +154,12 @@ public class PlayerMovingState : EntityStateBehaviour
     {
         Vector3 horizontal = new Vector3(_move.x, 0, _move.y).normalized * movementSpeed;
         // include vertical velocity
-        Vector3 finalMove = horizontal + Vector3.up * VerticalVelocity;
-        charController.Move(finalMove * Time.deltaTime);
+       // Vector3 finalMove = horizontal + Vector3.up * VerticalVelocity;
+        move = horizontal;
 
-        // rotate to face movement direction whitout vertical movement
-        Vector3 newDirection = new Vector3(finalMove.x, 0, finalMove.z);
-        utilityLib.FaceDirection(newDirection);
+
     }
+
     /*IEnumerator JumpRoutine()
     {        
         _canJump = false;
@@ -146,7 +176,7 @@ public class PlayerMovingState : EntityStateBehaviour
         while (timer < dashDuration)
         {
             _canMove = false;
-            charController.Move(transform.forward * dashSpeed * Time.deltaTime);
+            charRB.AddForce(transform.forward * dashSpeed, ForceMode.Impulse);
             timer += Time.deltaTime;
             yield return null;
         }
@@ -154,4 +184,6 @@ public class PlayerMovingState : EntityStateBehaviour
         yield return new WaitForSeconds(dashCooldown);
         _canDash = true;
     }
+
+    
 }

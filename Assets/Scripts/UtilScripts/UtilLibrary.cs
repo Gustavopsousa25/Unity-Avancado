@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UtilLibrary : MonoBehaviour
 {
-    [SerializeField] private float gravityMult = 1.5f;
+    //[SerializeField] private float gravityMult = 1.5f;
     private float _verticalVelocity;
 
     public float VerticalVelocity { get => _verticalVelocity; set => _verticalVelocity = value; }
@@ -14,7 +14,7 @@ public class UtilLibrary : MonoBehaviour
         if (direction.sqrMagnitude > 0.1f)
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
     }
-    public void ApplyGravity(CharacterController cc)
+    /*public void ApplyGravity(CharacterController cc)
     {
         if (cc.isGrounded && VerticalVelocity < 0)
         {
@@ -22,5 +22,5 @@ public class UtilLibrary : MonoBehaviour
         }
 
         VerticalVelocity += Physics.gravity.y * gravityMult * Time.deltaTime;
-    }
+    }*/
 }
