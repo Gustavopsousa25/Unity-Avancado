@@ -44,6 +44,14 @@ public class EnemieChasing : EntityStateBehaviour
         if (target != null && coneOfSightComponent.HasSeenPlayerThisFrame())
         {
             ChasePlayer();
+
+            if(Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, attackRange))
+            {
+                if (hit.collider.gameObject == target)
+                {
+                    AssociatedStateMachine.SetState(typeof (EnemieAttacking));
+                }
+            }
         }
     }
 
@@ -59,17 +67,12 @@ public class EnemieChasing : EntityStateBehaviour
         }
         return null;
     }
-    private bool TargetInRange()
-    {
-        Vector3 ray = transform.position;
-        return false;
-    }
     private void ChasePlayer()
     {
         agent.SetDestination(target.position);
     }
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
-        Debug.DrawLine(transform.position, new Vector3(), Color.green);
+        Debug.DrawLine(transform.position, transform.position + transform.forward * attackRange, Color.green);
     }
 }

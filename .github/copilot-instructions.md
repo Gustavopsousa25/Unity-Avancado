@@ -2,7 +2,7 @@
 - Project name: Unity-Avancado
 - Unity version: Unity 2022.3.38f1
 - Active game object:
-  - Name: EnemieAi (1)
+  - Name: HumanCharacterDummy_M@Idle
   - Tag: Untagged
-  - Layer: Default
+  - Layer: Outlined Objects
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

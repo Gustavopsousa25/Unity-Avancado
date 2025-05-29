@@ -117,7 +117,7 @@ public class PlayerMovingState : EntityStateBehaviour
     }
     public void OnAttackPerformed(InputAction.CallbackContext context)
     {
-        AssociatedStateMachine.SetState(typeof (PlayerAttackingState));
+       //AssociatedStateMachine.SetState(typeof (PlayerAttackingState));
     }
     private void MoveInDirection(float movementSpeed)
     {

@@ -5,7 +5,6 @@ using UnityEngine.Events;
 
 public class AnimationEvent : MonoBehaviour
 {
-
     public UnityEvent onDamageStart, onDamageEnd, animFinishedEvent;
     public void StartDamagePeriod()
     {

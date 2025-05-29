@@ -6,15 +6,20 @@ using UnityEngine.Events;
 public class HealthComponent : MonoBehaviour
 {
     [SerializeField] private int maxHealth;
-    private UnityEvent OnDamaged, OnDeath;
+    public UnityEvent OnDamaged, OnDeath;
     private int currentHealth;
 
+    private void Awake()
+    {
+        currentHealth = maxHealth;
+    }
     protected void Die()
     {
         OnDeath.Invoke();
+        Destroy(gameObject);
     }
 
-    protected void TakeDamage(int dmgValue)
+    public void TakeDamage(int dmgValue)
     {
         currentHealth -= dmgValue;
         OnDamaged.Invoke();
