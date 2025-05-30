@@ -12,11 +12,10 @@ public class ConeOfSight : MonoBehaviour
     private GameObject target;
     private Transform targetTransform;
     private bool hasSeenPlayer;
-
-    private void Awake()
+    private void Start()
     {
         target = FindObjectOfType<PlayerMovingState>().gameObject;
-        targetTransform = target.transform;  
+        targetTransform = target.transform;
     }
 
     private void Update()

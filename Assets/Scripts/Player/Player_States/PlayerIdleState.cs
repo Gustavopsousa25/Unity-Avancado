@@ -38,15 +38,14 @@ public class PlayerIdleState : EntityStateBehaviour
 
     public override Type StateTransitionCondicion()
     {
-        if (MovementActionMap.action.phase == InputActionPhase.Started)
+        Vector2 move = MovementActionMap.action.ReadValue<Vector2>();
+        if (move.sqrMagnitude > 0.01f)
+            return typeof(PlayerMovingState);
+
+        /*if (MovementActionMap.action.phase == InputActionPhase.Started)
         {
             return typeof(PlayerMovingState);
-        } 
-        else if (DashActionMap.action.phase == InputActionPhase.Started)
-        {
-
-            return typeof (PlayerDashingState);
-        }
+        } */
         if(AttackActionMap.action.triggered)
         {
             return typeof(PlayerAttackingState);
