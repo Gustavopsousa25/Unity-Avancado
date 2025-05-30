@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
         }
         if (health != null)
         {
-            print("target has health");
+            print(health.gameObject.name+ "  -" + weaponDamage + ("Health") + ("------Current Health:"+ health.GetCurrentHealth()));
             health.TakeDamage(weaponDamage);
         }
 

@@ -16,7 +16,8 @@ public class PlayerAttackingState : EntityStateBehaviour
     {
         charRB = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
-        weaponCollider = weapon.GetComponent<Collider>();   
+        weaponCollider = weapon.GetComponent<Collider>();
+        weaponCollider.enabled = false;
         return charRB;
     }
 
@@ -52,26 +53,19 @@ public class PlayerAttackingState : EntityStateBehaviour
     }*/
     public void PushPlayer()
     {
-        //charRB.AddForce(transform.forward * pushDistance, ForceMode.Impulse);
+        charRB.AddForce(transform.forward * pushDistance, ForceMode.Impulse);
     }
     public void StartAttackPeriod()
     {
-        Debug.Log("Start Attack Period");
         weaponCollider.enabled = true;
     }
     public void EndAttackPeriod()
     {
-        Debug.Log("End Attack Period");
         weaponCollider.enabled = false;
     }
     public void AttackEnded()
     {
-        print("AttackEnded");
         AssociatedStateMachine.SetState(typeof(PlayerMovingState));
 
-    }
-
-    public override void OnStateFixedUpdate()
-    {
     }
 }

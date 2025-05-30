@@ -15,7 +15,7 @@ public class EnemieChasing : EntityStateBehaviour
 
     public override bool Initialize()
     {
-        target = FindObjectOfType<PlayerIdleState>().transform;
+        target = FindObjectOfType<PlayerMovingState>().transform;
         WalkingMoveSpeed = GetComponent<EnemieWandering>().MoveSpeed; 
         agent = GetComponent<NavMeshAgent>();
         coneOfSightComponent = GetComponent<ConeOfSight>();
@@ -23,21 +23,17 @@ public class EnemieChasing : EntityStateBehaviour
         return target && agent;
     }
 
-    public  void OnDisable()
+    public void OnDisable()
     {
-        agent.isStopped = true;
+        agent.enabled = false;
         anim.SetFloat("Walkspeed", MathF.Abs(0));
-    }
-
-    public override void OnStateFixedUpdate()
-    {
     }
 
     public void OnEnable()
     {
         coneOfSightComponent.enabled = true;   
         float ChasingMoveSpeed = WalkingMoveSpeed * moveSpeedMult;
-        agent.isStopped = false;
+        agent.enabled = true;
         agent.speed = ChasingMoveSpeed;
         anim.SetFloat("Walkspeed", MathF.Abs(ChasingMoveSpeed));
         ChasePlayer();

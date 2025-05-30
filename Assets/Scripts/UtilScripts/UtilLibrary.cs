@@ -12,7 +12,7 @@ public class UtilLibrary : MonoBehaviour
     public void FaceDirection(Vector3 direction)
     {
         if (direction.sqrMagnitude > 0.1f)
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.2f);
     }
     /*public void ApplyGravity(CharacterController cc)
     {

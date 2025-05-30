@@ -82,10 +82,10 @@ public class StateMachine : MonoBehaviour
             currentState.enabled = true;
         }
     }
-    private void FixedUpdate()
+    /*private void FixedUpdate()
     {
         currentState.OnStateFixedUpdate();
-    }
+    }*/
 
     // Function To help See If States Are The Same, Unused at the moment
     public bool IsCurrentState(EntityStateBehaviour stateBehaviour)

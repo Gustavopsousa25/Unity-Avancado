@@ -23,11 +23,6 @@ public class EnemieIdle : EntityStateBehaviour
             StopCoroutine(waitTimeRoutine);
         }
     }
-
-    public override void OnStateFixedUpdate()
-    {
-    }
-
     public void OnEnable()
     {
         waitTimeRoutine = StartCoroutine(WaitForTimeAndSwitchState());

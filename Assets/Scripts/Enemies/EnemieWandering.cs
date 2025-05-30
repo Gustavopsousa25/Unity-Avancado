@@ -21,7 +21,7 @@ public class EnemieWandering : EntityStateBehaviour
     public void OnEnable()
     {
         coneOfSightComponent.enabled = true;
-        agent.isStopped = false;
+        agent.enabled = true; 
         agent.speed = MoveSpeed;
         anim.SetFloat("Walkspeed", MathF.Abs(MoveSpeed));
         Destination = PatrolPath.GetPOIAtIndex(POIIndex++);
@@ -40,7 +40,7 @@ public class EnemieWandering : EntityStateBehaviour
 
     public void OnDisable()
     {
-        agent.isStopped = true;
+        agent.enabled = false;
         anim.SetFloat("Walkspeed", 0);
         OnDestinationReached?.Invoke();
         OnDestinationReached -= () => PatrolPath.RandomizeAllPoints();
@@ -66,10 +66,5 @@ public class EnemieWandering : EntityStateBehaviour
         }
 
         return null;
-    }
-
-    public override void OnStateFixedUpdate()
-    {
-
     }
 }

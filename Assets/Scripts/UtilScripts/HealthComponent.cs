@@ -21,11 +21,18 @@ public class HealthComponent : MonoBehaviour
 
     public void TakeDamage(int dmgValue)
     {
-        currentHealth -= dmgValue;
-        OnDamaged.Invoke();
         if (currentHealth <= 0)
         {
             Die();
         }
+        else
+        {
+            currentHealth -= dmgValue;
+            OnDamaged.Invoke();
+        }
+    }
+    public int GetCurrentHealth()
+    {
+        return currentHealth;
     }
 }

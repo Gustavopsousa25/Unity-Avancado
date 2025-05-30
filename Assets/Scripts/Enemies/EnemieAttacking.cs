@@ -6,8 +6,6 @@ using UnityEngine;
 public class EnemieAttacking : EntityStateBehaviour
 {
     [SerializeField] private GameObject weapon;
-    [SerializeField] private int damage;
-    [SerializeField] private Transform punchLocator;
     private Collider weaponCollider;
     private Animator anim;
     private ConeOfSight coneOfSightComponent;
@@ -16,18 +14,19 @@ public class EnemieAttacking : EntityStateBehaviour
         coneOfSightComponent = GetComponent<ConeOfSight>();
         anim = GetComponentInChildren<Animator>();
         weaponCollider = weapon.GetComponent<Collider>();
+        weaponCollider.enabled = false;
         return coneOfSightComponent && anim;
     }
 
     public void OnDisable()
     {
         coneOfSightComponent.enabled = true;
+        weaponCollider.enabled = false;
     }
 
     public void OnEnable()
     {
         coneOfSightComponent.enabled = false;
-        weaponCollider.enabled = false;
         anim.SetTrigger("isAttacking");
     }
 
@@ -62,7 +61,4 @@ public class EnemieAttacking : EntityStateBehaviour
         AssociatedStateMachine.SetState(typeof (EnemieChasing));
     }
 
-    public override void OnStateFixedUpdate()
-    {
-    }
 }
