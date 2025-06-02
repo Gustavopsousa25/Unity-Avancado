@@ -2,7 +2,7 @@
 - Project name: Unity-Avancado
 - Unity version: Unity 2022.3.38f1
 - Active game object:
-  - Name: EnemieAi
+  - Name: RythmManager
   - Tag: Untagged
   - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
