@@ -637,8 +637,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3b1ffc40ffd8b46a119c8190b6163b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxScale: {x: 4, y: 4, z: 4}
-  pulseSpeed: 3
+  maxScale: {x: 3, y: 3, z: 3}
+  pulseSpeed: 2
 --- !u!114 &1710207459
 MonoBehaviour:
   m_ObjectHideFlags: 0
