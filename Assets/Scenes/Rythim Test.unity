@@ -577,7 +577,7 @@ RectTransform:
   m_GameObject: {fileID: 1710207454}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6.1499996, y: 6.1499996, z: 6.1499996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 357769500}
@@ -637,8 +637,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3b1ffc40ffd8b46a119c8190b6163b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minScale: {x: 0.1, y: 0.1, z: 0.1}
-  pulseSpeed: 2
+  maxScale: {x: 4, y: 4, z: 4}
+  pulseSpeed: 3
 --- !u!114 &1710207459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,7 +654,7 @@ MonoBehaviour:
   mouseInput: {fileID: 1400639435471443222, guid: f184a438595e8134ab6ef9528a9012ea,
     type: 3}
   targetImage: {fileID: 1710207456}
-  flashDurantion: 0.3
+  flashDurantion: 0.15
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
