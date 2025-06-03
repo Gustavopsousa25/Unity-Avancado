@@ -50,22 +50,18 @@ public class BeatInputFeedback : MonoBehaviour
     }
     public void OnInputperformed(InputAction.CallbackContext context)
     {
-        Debug.Log("[BeatInput] Input performed at time " + Time.time);
         if (manager == null || targetImage == null)
             return;
 
-        // 1) Check if we’re on the beat right now
+        //  Check if we’re on the beat right now
         bool onBeat = manager.IsOnBeat();
-        Debug.Log($"[BeatInput] IsOnBeat() returned {onBeat}");
 
-
-        // 2) Tint the image green if on-beat, red if off-beat
         if (onBeat)
             targetImage.color = Color.green;
         else
             targetImage.color = Color.red;
 
-        // 3) Start the flash timer so we can revert later
+        // Start the flash timer so we can revert later
         isFlasing = true;
         flashTimer = flashDurantion;
     }

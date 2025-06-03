@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class BeatPulse : MonoBehaviour
 {
-    [SerializeField] private Vector3 minScale = new Vector3(.5f, .5f, .5f);
+    [SerializeField] private Vector3 maxScale = new Vector3(.5f, .5f, .5f);
     [SerializeField] private float pulseSpeed = 5f;
     private Image target;
     private RythmManager manager;
@@ -27,7 +27,7 @@ public class BeatPulse : MonoBehaviour
 
         if (manager.IsOnBeat())
         {
-            transform.localScale = minScale;
+            transform.localScale = maxScale;
         }
         else
         {
