@@ -637,7 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3b1ffc40ffd8b46a119c8190b6163b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minScale: {x: 0.1, y: 0.1, z: 0.1}
+  maxScale: {x: 3, y: 3, z: 3}
   pulseSpeed: 2
 --- !u!114 &1710207459
 MonoBehaviour:
