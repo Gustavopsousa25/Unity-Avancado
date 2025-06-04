@@ -12,7 +12,7 @@ public class POIManager : MonoBehaviour
 
     private void Awake()
     {
-        origin = GetComponent<Transform>();
+        origin = GetComponentInParent<Transform>();
         RandomizeAllPoints();
     }
     // Get an element from the list.
@@ -36,14 +36,14 @@ public class POIManager : MonoBehaviour
     }
     private Vector3 RandomizePointPosition(int index)
     {
-         PointsOfInterest[index] = GetRandomPositionInRange(transform.position, minDis, maxRange);
+         PointsOfInterest[index] = GetRandomPositionInRange(origin.position, minDis, maxRange);
 
         return PointsOfInterest[index];
     }
     private Vector3 GetRandomPositionInRange(Vector3 center, float innerRadius, float outerRadius)
     {
         // pick a random direction on XZ
-        Vector2 newpointPosition = new Vector2(Random.Range(innerRadius, outerRadius),Random.Range(innerRadius, outerRadius));//Random.insideUnitCircle.normalized;
+        Vector2 newpointPosition = new Vector2(Random.Range(innerRadius, outerRadius),Random.Range(innerRadius, outerRadius)); 
         // pick a distance between inner and outer radius
         float distance = Random.Range(innerRadius, outerRadius);
         // build the final position

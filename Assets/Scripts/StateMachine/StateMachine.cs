@@ -9,7 +9,7 @@ public class StateMachine : MonoBehaviour
     [SerializeField] protected internal string initalStateNameType = "";
     [SerializeField] public string initialStateNameTypeV2 = "";
     [SerializeField] protected bool shearchChildren;
-    [SerializeField] private TextMeshProUGUI stateText;
+    //[SerializeField] private TextMeshProUGUI stateText;
 
     // Dictionary of state behaviours
     private Dictionary<Type, EntityStateBehaviour> StateBehaviour = new Dictionary<Type, EntityStateBehaviour>();
@@ -74,8 +74,8 @@ public class StateMachine : MonoBehaviour
         Type newState = currentState.StateTransitionCondicion();
         if (IsValidNewStateIndex(newState))
         {
-            if(stateText!=null)
-            stateText.text = newState.ToString();
+            //if(stateText!=null)
+            //stateText.text = newState.ToString();
 
             currentState.enabled = false;
             currentState = StateBehaviour[newState];
