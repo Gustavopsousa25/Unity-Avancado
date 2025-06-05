@@ -1,19 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using System.Linq;
 
 public class MapGenerator : MonoBehaviour
 {
     [SerializeField] private int maxRoom;
-    [SerializeField] private GameObject defaultRoomPrefab, doorPrefab, playerPrefab;
+    [SerializeField] private GameObject lobbyRoomPrefab, enemieRoomPrefab, bossRoomPrefab, doorPrefab, playerPrefab;
 
     [SerializeField] float roomSpacing = 2f;
 
 
     [SerializeField] List<Direction> allDirections = new List<Direction>();
-    List<Direction> availableDirection = new List<Direction>(); 
 
-    List<GameObject> rooms = new List<GameObject>();
+    private List<GameObject> rooms = new List<GameObject>();
+    private List<GameObject> doors = new List<GameObject>();
     private Vector2Int currentPos = Vector2Int.zero;
 
     List<Vector2Int> occupiedPosition = new List<Vector2Int>();
@@ -25,46 +27,74 @@ public class MapGenerator : MonoBehaviour
         west,
         east
     }
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        StartGenerate();
         SpawnPlayer();
+        StartGenerate();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+         if (Input.GetKeyDown(KeyCode.R))
+        {
+            ClearMap();
+            StartGenerate();
+        }
     }
 
     void StartGenerate()
     {
-        rooms.Add(Instantiate(defaultRoomPrefab, Vector3.zero,Quaternion.identity));
-        
+        currentPos = Vector2Int.zero;
+        GameObject firstRoom = Instantiate(lobbyRoomPrefab, Vector3.zero,Quaternion.identity);
+        rooms.Add(firstRoom);
+        occupiedPosition.Add(currentPos);
         GenerateMap();
-
+        PlaceDoors();
     }
 
     private void GenerateMap()
     {
         for(int i= 1; i <= maxRoom; i++)
         {
-            availableDirection = allDirections;
-            GenerateDirection();
-            rooms.Add(Instantiate(defaultRoomPrefab, new Vector3(currentPos.x, 0, currentPos.y) * roomSpacing, Quaternion.identity));
-            occupiedPosition.Add(currentPos);
+            if (Random.value < 0.2f && occupiedPosition.Count > 1)
+            {
+                int parentRoom = Random.Range(0, occupiedPosition.Count);
+                currentPos = occupiedPosition[parentRoom];
+            }
+            List<Direction> availableDirections = new List<Direction>(allDirections);
+            bool canExpand = GenerateDirection(availableDirections);
+            if (!canExpand)
+            {
+                i--; 
+                continue;
+            }
+            if (i == maxRoom)
+            {
+                rooms.Add(Instantiate(bossRoomPrefab, new Vector3(currentPos.x, 0, currentPos.y) * roomSpacing, Quaternion.identity));
+                occupiedPosition.Add(currentPos);
+            }
+            else
+            {
+                rooms.Add(Instantiate(enemieRoomPrefab, new Vector3(currentPos.x, 0, currentPos.y) * roomSpacing, Quaternion.identity));
+                occupiedPosition.Add(currentPos);
+            }
+           
+            
         }
-       PlaceDoors();
 
     }
 
-    private void GenerateDirection()
+    private bool GenerateDirection(List<Direction> availableDirections)
     {
+        if(availableDirections.Count == 0)
+        {
+            return false;
+        }
+        int index = Random.Range(0, availableDirections.Count);
 
-        Direction direction = availableDirection[Random.Range(0, availableDirection.Count)];
+        Direction direction = availableDirections[index];
 
-        Vector2Int temp = currentPos;
+        Vector2Int previousPos = currentPos;
 
         switch(direction)
         {
@@ -85,21 +115,20 @@ public class MapGenerator : MonoBehaviour
         if(occupiedPosition.Contains(currentPos))
         {
 
-            currentPos = temp;
-            if (availableDirection.Count == 0) return;
-            availableDirection.Remove(direction);
-            GenerateDirection();
+            currentPos = previousPos;
+            availableDirections.RemoveAt(index);
+            return GenerateDirection(availableDirections);
         }
-
+        return true;
     }
     private void SpawnPlayer()
     {
         if (playerPrefab != null)
-        Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        Instantiate(playerPrefab,new Vector3(0,1,0), Quaternion.identity);
     }
-    private void InstantiateDoorInRoom(Vector3 roomPosition, Direction doorDirection, float doorOffset)
+    private void InstantiateDoorInRoom(GameObject room, Direction doorDirection, float doorOffset)
     {
-        Vector3 doorPos = roomPosition;
+        Vector3 doorPos = room.transform.position;
         Quaternion doorRot = Quaternion.identity;
 
         switch (doorDirection)
@@ -121,38 +150,55 @@ public class MapGenerator : MonoBehaviour
                 doorRot = Quaternion.Euler(0, 270, 0);
                 break;
         }
-
-        Instantiate(doorPrefab, doorPos, doorRot);
+        RoomContentHolder holder = room.GetComponentInChildren<RoomContentHolder>();
+        GameObject newDoor = Instantiate(doorPrefab, doorPos, doorRot, holder.transform);
+        doors.Add(newDoor);
     }
     private void PlaceDoors()
     {
-        float doorOffset = roomSpacing / 3f;  // half room spacing
+        float doorOffset = roomSpacing / 3f; 
 
         foreach (GameObject room in rooms)
         {
             Vector3 roomPos = room.transform.position;
-            Vector2Int roomGridPos = new Vector2Int(
-                Mathf.RoundToInt(roomPos.x / roomSpacing),
-                Mathf.RoundToInt(roomPos.z / roomSpacing)
-            );
+            Vector2Int roomGridPos = new Vector2Int(Mathf.RoundToInt(roomPos.x / roomSpacing),Mathf.RoundToInt(roomPos.z / roomSpacing));
 
             // Check neighbors and instantiate doors
-            if (occupiedPosition.Contains(roomGridPos + Vector2Int.up)) // north
+            if (occupiedPosition.Contains(roomGridPos + Vector2Int.up))
             {
-                InstantiateDoorInRoom(roomPos, Direction.north, doorOffset);
+                InstantiateDoorInRoom(room, Direction.north, doorOffset);
             }
-            if (occupiedPosition.Contains(roomGridPos + Vector2Int.down)) // south
+            if (occupiedPosition.Contains(roomGridPos + Vector2Int.down)) 
             {
-                InstantiateDoorInRoom(roomPos, Direction.south, doorOffset);
+                InstantiateDoorInRoom(room, Direction.south, doorOffset);
             }
-            if (occupiedPosition.Contains(roomGridPos + Vector2Int.right)) // east
+            if (occupiedPosition.Contains(roomGridPos + Vector2Int.right)) 
             {
-                InstantiateDoorInRoom(roomPos, Direction.east, doorOffset);
+                InstantiateDoorInRoom(room, Direction.east, doorOffset);
             }
-            if (occupiedPosition.Contains(roomGridPos + Vector2Int.left)) // west
+            if (occupiedPosition.Contains(roomGridPos + Vector2Int.left)) 
             {
-                InstantiateDoorInRoom(roomPos, Direction.west, doorOffset);
+                InstantiateDoorInRoom(room, Direction.west, doorOffset);
             }
         }
+    }
+    private void ClearMap()
+    {
+        foreach (GameObject room in rooms)
+        {
+            if (room != null)
+                Destroy(room);
+        }
+        rooms.Clear();
+
+        foreach (GameObject door in doors)
+        {
+            if (door != null)
+                Destroy(door);
+        }
+        doors.Clear();
+
+        occupiedPosition.Clear();
+        currentPos = Vector2Int.zero;
     }
 }

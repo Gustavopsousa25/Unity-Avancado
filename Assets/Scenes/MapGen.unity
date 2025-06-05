@@ -259,7 +259,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxRoom: 12
-  defaultRoomPrefab: {fileID: 125065672463025474, guid: 99440f755cb70a24dae2c62aec461228,
+  lobbyRoomPrefab: {fileID: 125065672463025474, guid: d8e45fb02bcaa6c46b4adbb7f8ae585c,
+    type: 3}
+  enemieRoomPrefab: {fileID: 125065672463025474, guid: 99440f755cb70a24dae2c62aec461228,
+    type: 3}
+  bossRoomPrefab: {fileID: 125065672463025474, guid: d8e45fb02bcaa6c46b4adbb7f8ae585c,
     type: 3}
   doorPrefab: {fileID: 7480289713761291716, guid: 4310dbfde880a2f4f82f1b2bae3ffc78,
     type: 3}
