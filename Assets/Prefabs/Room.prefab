@@ -78,6 +78,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81616d9636d780542a90017c4bef665b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorPrefab: {fileID: 7480289713761291716, guid: 4310dbfde880a2f4f82f1b2bae3ffc78,
+    type: 3}
 --- !u!1 &4825996130682395031
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,34 +283,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b40a818b8e35045be3592801956bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room: {fileID: 2905073274078977887}
-  OnTargetEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2905073274078977887}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  OnTargetLeave:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2905073274078977887}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
