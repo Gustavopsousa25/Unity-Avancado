@@ -249,7 +249,6 @@ MonoBehaviour:
   initalStateNameType: EnemieIdle
   initialStateNameTypeV2: EnemieIdle
   shearchChildren: 0
-  stateText: {fileID: 0}
 --- !u!114 &4738357380332503829
 MonoBehaviour:
   m_ObjectHideFlags: 0

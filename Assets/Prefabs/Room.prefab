@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81616d9636d780542a90017c4bef665b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorPrefab: {fileID: 7480289713761291716, guid: 4310dbfde880a2f4f82f1b2bae3ffc78,
+  doorPrefab: {fileID: -7514814824757309631, guid: 4310dbfde880a2f4f82f1b2bae3ffc78,
     type: 3}
 --- !u!1 &4825996130682395031
 GameObject:
@@ -215,7 +215,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: b8cbd2c601af7e6458b0b50f5f381a4a, type: 2}
+  m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
 --- !u!1 &7283675486369421434
 GameObject:

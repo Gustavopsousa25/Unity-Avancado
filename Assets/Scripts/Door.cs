@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private Transform destination;
+
+    public void SetDoorDestination(Transform target)
     {
-        
+        destination = target;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnCollisionEnter(Collision collision)
     {
-        
+        PlayerMovingState player = collision.gameObject.GetComponent<PlayerMovingState>();
+        if (player != null)
+        {
+            player.transform.position = destination.position - destination.forward * 1;
+        }
     }
 }

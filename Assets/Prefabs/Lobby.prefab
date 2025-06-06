@@ -249,5 +249,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81616d9636d780542a90017c4bef665b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorPrefab: {fileID: 7480289713761291716, guid: 4310dbfde880a2f4f82f1b2bae3ffc78,
+  doorPrefab: {fileID: -7514814824757309631, guid: 4310dbfde880a2f4f82f1b2bae3ffc78,
     type: 3}

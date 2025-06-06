@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -44,7 +44,15 @@ public class MapGenerator : MonoBehaviour
         GenerateMap();
     }
 
-    private void GenerateMap()
+    public RoomContentHolder GetRoomByGridPos(Vector2Int targetGridPos)
+    {
+        int index = occupiedPosition.IndexOf(targetGridPos);
+
+        GameObject room = rooms[index];
+        return room.GetComponentInChildren<RoomContentHolder>();
+    }
+
+    private async void GenerateMap()
     {
         for (int i = 1; i <= maxRoom; i++)
         {
@@ -64,6 +72,7 @@ public class MapGenerator : MonoBehaviour
             if (i == maxRoom)
             {
                 rooms.Add(Instantiate(bossRoomPrefab, new Vector3(currentPos.x, 0, currentPos.y) * RoomSpacing, Quaternion.identity));
+
                 occupiedPosition.Add(currentPos);
             }
             else
@@ -71,11 +80,25 @@ public class MapGenerator : MonoBehaviour
                 rooms.Add(Instantiate(enemieRoomPrefab, new Vector3(currentPos.x, 0, currentPos.y) * RoomSpacing, Quaternion.identity));
                 occupiedPosition.Add(currentPos);
             }
-
-            RoomContentHolder roomContent = rooms[rooms.Count -1].GetComponentInChildren<RoomContentHolder>();
-            print(roomContent.name);
-            roomContent.PlaceDoors();
+            RoomContentHolder roomContent = rooms[rooms.Count-1].GetComponentInChildren<RoomContentHolder>();
+            roomContent.SetRoomPos(currentPos);
         }
+
+        rooms.ForEach(room => {
+                RoomContentHolder roomContent = room.GetComponentInChildren<RoomContentHolder>();
+                roomContent.Init(this);
+                roomContent.PlaceDoors();
+            });
+
+        StartCoroutine(MyRoutine());
+
+    }
+
+    IEnumerator MyRoutine()
+    {
+
+        yield return new WaitForSeconds(1f); // ← One-liner delay
+        rooms.ForEach(room => room.GetComponentInChildren<RoomContentHolder>().SetUpRoomDoors());
     }
 
     private bool GenerateDirection(List<Direction> availableDirections)
@@ -120,26 +143,33 @@ public class MapGenerator : MonoBehaviour
         if (playerPrefab != null)
             Instantiate(playerPrefab, new Vector3(0, 1, 0), Quaternion.identity);
     }
-
     public RoomContentHolder[] GetAdjacentRooms(Vector2Int roomGridPos)
     {
         List<RoomContentHolder> adjacentRooms = new List<RoomContentHolder>();
 
         foreach (var room in rooms)
         {
-            Vector2Int roomPos = new Vector2Int(Mathf.RoundToInt(room.transform.position.x / RoomSpacing), Mathf.RoundToInt(room.transform.position.z / RoomSpacing));
-
-            if (roomPos == roomGridPos + Vector2Int.up ||
-                roomPos == roomGridPos + Vector2Int.down ||
-                roomPos == roomGridPos + Vector2Int.left ||
-                roomPos == roomGridPos + Vector2Int.right)
+            if (room == null)
             {
-                adjacentRooms.Add(room.GetComponentInChildren<RoomContentHolder>());
+                Debug.LogWarning("Found null room in rooms list.");
+                continue;
             }
 
+            Vector2Int roomPos = new Vector2Int(Mathf.RoundToInt(room.transform.position.x / RoomSpacing),Mathf.RoundToInt(room.transform.position.z / RoomSpacing));
 
+            if (roomPos == roomGridPos + Vector2Int.up ||roomPos == roomGridPos + Vector2Int.down ||roomPos == roomGridPos + Vector2Int.left ||roomPos == roomGridPos + Vector2Int.right)
+            {
+                RoomContentHolder holder = room.GetComponentInChildren<RoomContentHolder>();
+                if (holder != null)
+                {
+                    adjacentRooms.Add(holder);
+                }
+                else
+                {
+                    Debug.LogWarning($"Room at {room.transform.position} does not have a RoomContentHolder.");
+                }
+            }
         }
-        print(adjacentRooms.Count);
         return adjacentRooms.ToArray();
     }
 

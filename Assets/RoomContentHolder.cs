@@ -1,35 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RoomContentHolder : MonoBehaviour
 {
-    [SerializeField] private GameObject doorPrefab;
-    //static RoomContentHolder prefab;
+    [SerializeField] private Door doorPrefab;
     private MapGenerator mapGenerator;
     private Vector2Int roomGridPos;
-    private List<GameObject> doors = new List<GameObject>();
-    private float doorDistance = 3f;
+    private List<Door> doors = new List<Door>();
+    private float doorDistance = 8f;
 
-    /*private void OnEnable()
-    {
-        prefab = this;
-    }*/
+    Dictionary<Direction, Door> doorsDict = new Dictionary<Direction, Door>();
     private void Start()
     {
-        mapGenerator = MapGenerator.Instance;
         roomGridPos = new Vector2Int(Mathf.RoundToInt(transform.position.x / mapGenerator.RoomSpacing), Mathf.RoundToInt(transform.position.z / mapGenerator.RoomSpacing));
     }
 
-    public RoomContentHolder(Vector2Int myGrid, MapGenerator generator)
+    public void Init(MapGenerator generator)
     {
-        roomGridPos = myGrid;
         mapGenerator = generator;
     }
-
+    public void SetRoomPos(Vector2Int roomPos)
+    {
+        roomGridPos = roomPos;
+    }
     public void PlaceDoors()
     {
         RoomContentHolder[] adjacentRooms = mapGenerator.GetAdjacentRooms(roomGridPos);
+        print(adjacentRooms.Length);
 
         foreach (var room in adjacentRooms)
         {
@@ -54,25 +53,89 @@ public class RoomContentHolder : MonoBehaviour
         switch (doorDirection)
         {
             case Direction.north:
-                doorPos += new Vector3(0, 0, doorDistance);
+                doorPos += new Vector3(0, 1, doorDistance);
                 doorRot = Quaternion.Euler(0, 0, 0);
                 break;
             case Direction.south:
-                doorPos += new Vector3(0, 0, -doorDistance);
+                doorPos += new Vector3(0, 1, -doorDistance);
                 doorRot = Quaternion.Euler(0, 180, 0);
                 break;
             case Direction.east:
-                doorPos += new Vector3(doorDistance, 0, 0);
+                doorPos += new Vector3(doorDistance, 1, 0);
                 doorRot = Quaternion.Euler(0, 90, 0);
                 break;
             case Direction.west:
-                doorPos += new Vector3(-doorDistance, 0, 0);
+                doorPos += new Vector3(-doorDistance, 1, 0);
                 doorRot = Quaternion.Euler(0, 270, 0);
                 break;
         }
 
-        GameObject newDoor = Instantiate(doorPrefab, doorPos, doorRot, transform);
+        Door newDoor = Instantiate(doorPrefab, doorPos, doorRot, transform);
+        doorsDict.Add(doorDirection,newDoor);
+
         doors.Add(newDoor);
     }
+    public void SetUpRoomDoors()
+    {
+        foreach (var door in doorsDict)
+        {
+            Direction dir = door.Key;       // Get the direction (key)
+            Door newDoor = door.Value;      // Get the door (value)
+
+            Vector2Int offset = Vector2Int.zero;
+
+            switch (dir)
+            {
+                case Direction.north:
+                    offset.y++;
+                    break;
+                case Direction.south:
+                    offset.y--;
+                    break;
+                case Direction.east:
+                    offset.x++;
+                    break;
+                case Direction.west:
+                    offset.x--;
+                    break;
+            }
+
+            Direction oppoDir = OppositeDirection(dir);
+
+            RoomContentHolder room = mapGenerator.GetRoomByGridPos(roomGridPos + offset);
+            if(room.TryGetDoorByDirection(oppoDir, out Door doorDest))
+            {
+                print(doorDest);
+                newDoor.SetDoorDestination(doorDest.transform);
+            }
+        }
+    }
+
+    public bool TryGetDoorByDirection(Direction dir, out Door door)
+    {
+        door = null;
+
+        if(doorsDict.TryGetValue(dir,out Door newDoor))
+        {
+            door = newDoor;
+            return true;
+        }
+
+        return false;
+    }
+    private Direction OppositeDirection(Direction dir)
+    {
+
+        if(dir==Direction.north)
+            return Direction.south;
+        else if(dir==Direction.south)
+            return Direction.north;
+        else if(dir==Direction.east)
+            return Direction.west;
+        else
+            return Direction.east;
+    }
 }
+
+
 
