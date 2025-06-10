@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,32 +6,41 @@ using UnityEngine.Events;
 
 public class DetectTarget : MonoBehaviour
 {
-    private GameObject room;
-    private Collider detectionZone;
+    [SerializeField]private GameObject room;
+    public Action OnTargetInsideThisRoom;
     private GameObject target;
+    private MapGenerator mapGen;
 
     private void Awake()
     {
-        room = FindObjectOfType<RoomContentHolder>().gameObject;
-        detectionZone = GetComponent<BoxCollider>();
-    }
-    private void Start()
-    {
-        room.SetActive(false);
-        target = FindObjectOfType<PlayerMovingState>().gameObject;
+        mapGen = MapGenerator.Instance;
+        mapGen.OnMapReady += () => DisableRoom();
+        mapGen.OnMapReady += () => FindTarget();
+        
+        print(target);
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == target)
         {
             room.SetActive(true);
+            OnTargetInsideThisRoom?.Invoke();
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject == target)
         {
-            room.SetActive(false);
+            DisableRoom();    
         }
+    }
+
+    public void DisableRoom()
+    {
+        room.SetActive(false);
+    }
+    public void FindTarget()
+    {
+        target = FindObjectOfType<PlayerMovingState>().gameObject;
     }
 }

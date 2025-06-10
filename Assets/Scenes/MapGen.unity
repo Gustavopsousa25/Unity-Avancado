@@ -520,7 +520,7 @@ MonoBehaviour:
     type: 3}
   playerPrefab: {fileID: 8221412782809769960, guid: b1a0232347edf474197ee597073f0976,
     type: 3}
-  roomSpacing: 25
+  roomSpacing: 50
   allDirections: 00000000010000000200000003000000
 --- !u!1 &2059006623
 GameObject:

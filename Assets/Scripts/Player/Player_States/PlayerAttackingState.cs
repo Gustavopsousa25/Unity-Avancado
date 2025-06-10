@@ -6,8 +6,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerAttackingState : EntityStateBehaviour
 {
+    [SerializeField] private InputActionReference attackInput;
     [SerializeField] private GameObject weapon;
     [SerializeField] private float pushDistance;
+    private int attackCount;
     private Collider weaponCollider;
     private bool attackEnded = false;
     private Rigidbody charRB;
@@ -23,16 +25,17 @@ public class PlayerAttackingState : EntityStateBehaviour
 
     public void OnDisable()
     {
-        //attackInput.action.performed -= OnAttack;
+        attackInput.action.performed -= OnAttack;
         //AssociatedStateMachine.SetState(typeof (PlayerMovingState));
     }
 
     public void OnEnable()
     {
         attackEnded = false;
-        //attackInput.action.performed += OnAttack;
         charRB.velocity = Vector3.zero;
-        anim.SetTrigger("isAttacking");
+        attackCount++;
+        anim.SetInteger("Attack",attackCount);
+        attackInput.action.performed += OnAttack;
     }
 
     public override void OnStateUpdate()
@@ -47,10 +50,13 @@ public class PlayerAttackingState : EntityStateBehaviour
         }
         return null;
     }
-    /*public void OnAttack(InputAction.CallbackContext context)
+    public void OnAttack(InputAction.CallbackContext context)
     {
-        anim.SetTrigger("isAttacking");
-    }*/
+        attackEnded = false;
+        charRB.velocity = Vector3.zero;
+        attackCount++;
+        anim.SetInteger("Attack", attackCount);
+    }
     public void PushPlayer()
     {
         charRB.AddForce(transform.forward * pushDistance, ForceMode.Impulse);
@@ -66,6 +72,5 @@ public class PlayerAttackingState : EntityStateBehaviour
     public void AttackEnded()
     {
         AssociatedStateMachine.SetState(typeof(PlayerMovingState));
-
     }
 }

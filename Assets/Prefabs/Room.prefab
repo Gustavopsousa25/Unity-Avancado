@@ -26,12 +26,43 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20, y: 1, z: 20}
+  m_LocalScale: {x: 30, y: 1, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1737403922597812177}
   - {fileID: 8986202106094766385}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2204485841496835424
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7509084908063788682}
+  m_Layer: 0
+  m_Name: SpawnerTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7509084908063788682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2204485841496835424}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.41, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8986202106094766385}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2905073274078977887
 GameObject:
@@ -43,6 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8986202106094766385}
   - component: {fileID: 7149942193122418989}
+  - component: {fileID: 6520764267027242020}
   m_Layer: 0
   m_Name: RoomContet
   m_TagString: RoomContent
@@ -64,6 +96,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3719100836529146641}
+  - {fileID: 7509084908063788682}
   m_Father: {fileID: 6756031259010705977}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7149942193122418989
@@ -80,6 +113,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doorPrefab: {fileID: -7514814824757309631, guid: 4310dbfde880a2f4f82f1b2bae3ffc78,
     type: 3}
+  doorDistance: 8
+--- !u!114 &6520764267027242020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2905073274078977887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e44be9b26c3b1484ea424be9a5812aea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxObjSpawned: 5
+  objectToSpawn: {fileID: 4693981467549515575, guid: aaac9ec7e9e12784a9b1df9015f70e0e,
+    type: 3}
+  location: {fileID: 7509084908063788682}
+  detect: {fileID: 6881071114465008261}
 --- !u!1 &4825996130682395031
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +143,7 @@ GameObject:
   - component: {fileID: 2076799842773582616}
   - component: {fileID: 8531789342193707498}
   - component: {fileID: 73306115160403774}
+  - component: {fileID: 3745350817606892667}
   - component: {fileID: 3989977701433713836}
   m_Layer: 0
   m_Name: Ground
@@ -186,6 +238,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3745350817606892667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825996130682395031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c29ec239d3ecc4479d3b4411d9dbe7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3989977701433713836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,3 +347,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b40a818b8e35045be3592801956bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  room: {fileID: 2905073274078977887}

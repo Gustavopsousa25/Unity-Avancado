@@ -5,6 +5,7 @@ using UnityEngine;
 public class UtilLibrary : MonoBehaviour
 {
     //[SerializeField] private float gravityMult = 1.5f;
+    [SerializeField] private float turnSpeed = 360f;
     private float _verticalVelocity;
 
     public float VerticalVelocity { get => _verticalVelocity; set => _verticalVelocity = value; }
@@ -12,15 +13,10 @@ public class UtilLibrary : MonoBehaviour
     public void FaceDirection(Vector3 direction)
     {
         if (direction.sqrMagnitude > 0.1f)
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.2f);
-    }
-    /*public void ApplyGravity(CharacterController cc)
-    {
-        if (cc.isGrounded && VerticalVelocity < 0)
         {
-            VerticalVelocity = -2f;
+            Quaternion targetRot = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, turnSpeed * Time.deltaTime);
         }
-
-        VerticalVelocity += Physics.gravity.y * gravityMult * Time.deltaTime;
-    }*/
+            
+    }
 }

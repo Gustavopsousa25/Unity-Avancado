@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 2782359549356672086}
   - component: {fileID: 466818831147342701}
   - component: {fileID: 3186082625745288224}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: EnemieAi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -336,8 +336,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PointsOfInterest:
   - {x: 0, y: 0, z: 0}
-  maxRange: 15
-  minDis: 3.99
+  maxRange: 7
+  minDis: 1
 --- !u!114 &3186082625745288224
 MonoBehaviour:
   m_ObjectHideFlags: 0

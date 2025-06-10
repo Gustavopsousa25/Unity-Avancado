@@ -12,7 +12,7 @@ public class POIManager : MonoBehaviour
 
     private void Awake()
     {
-        origin = GetComponentInParent<Transform>();
+        origin = GetComponentInParent<ObjectSpawner>().Location;
         RandomizeAllPoints();
     }
     // Get an element from the list.
@@ -36,7 +36,7 @@ public class POIManager : MonoBehaviour
     }
     private Vector3 RandomizePointPosition(int index)
     {
-         PointsOfInterest[index] = GetRandomPositionInRange(origin.position, minDis, maxRange);
+         PointsOfInterest[index] = GetRandomPositionInRange(transform.position, minDis, maxRange);
 
         return PointsOfInterest[index];
     }

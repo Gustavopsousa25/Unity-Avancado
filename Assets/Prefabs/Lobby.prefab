@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b40a818b8e35045be3592801956bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  room: {fileID: 4585507052450699396}
 --- !u!1 &1802362746630422155
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,3 +252,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doorPrefab: {fileID: -7514814824757309631, guid: 4310dbfde880a2f4f82f1b2bae3ffc78,
     type: 3}
+  doorDistance: 10

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] float roomSpacing = 2f;
     [SerializeField] List<Direction> allDirections = new List<Direction>();
 
+    public Action OnMapReady;
     private List<GameObject> rooms = new List<GameObject>();
     private Vector2Int currentPos = Vector2Int.zero;
 
@@ -42,6 +44,7 @@ public class MapGenerator : MonoBehaviour
         rooms.Add(firstRoom);
         occupiedPosition.Add(currentPos);
         GenerateMap();
+        OnMapReady?.Invoke();
     }
 
     public RoomContentHolder GetRoomByGridPos(Vector2Int targetGridPos)
@@ -52,13 +55,13 @@ public class MapGenerator : MonoBehaviour
         return room.GetComponentInChildren<RoomContentHolder>();
     }
 
-    private async void GenerateMap()
+    private void GenerateMap()
     {
         for (int i = 1; i <= maxRoom; i++)
         {
-            if (Random.value < 0.2f && occupiedPosition.Count > 1)
+            if (UnityEngine.Random.value < 0.1f && occupiedPosition.Count > 1)
             {
-                int parentRoom = Random.Range(0, occupiedPosition.Count);
+                int parentRoom = UnityEngine.Random.Range(0, occupiedPosition.Count);
                 currentPos = occupiedPosition[parentRoom];
             }
             List<Direction> availableDirections = new List<Direction>(allDirections);
@@ -90,15 +93,15 @@ public class MapGenerator : MonoBehaviour
                 roomContent.PlaceDoors();
             });
 
-        StartCoroutine(MyRoutine());
-
+        //StartCoroutine(MyRoutine());
+        rooms.ForEach(room => room.GetComponentInChildren<RoomContentHolder>().SetUpRoomDoors());
     }
 
     IEnumerator MyRoutine()
     {
 
-        yield return new WaitForSeconds(1f); // ← One-liner delay
-        rooms.ForEach(room => room.GetComponentInChildren<RoomContentHolder>().SetUpRoomDoors());
+        yield return new WaitForSeconds(1f); 
+        
     }
 
     private bool GenerateDirection(List<Direction> availableDirections)
@@ -107,7 +110,7 @@ public class MapGenerator : MonoBehaviour
         {
             return false;
         }
-        int index = Random.Range(0, availableDirections.Count);
+        int index = UnityEngine.Random.Range(0, availableDirections.Count);
 
         Direction direction = availableDirections[index];
 

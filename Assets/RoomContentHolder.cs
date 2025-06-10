@@ -9,7 +9,7 @@ public class RoomContentHolder : MonoBehaviour
     private MapGenerator mapGenerator;
     private Vector2Int roomGridPos;
     private List<Door> doors = new List<Door>();
-    private float doorDistance = 8f;
+    [SerializeField] private float doorDistance = 8f;
 
     Dictionary<Direction, Door> doorsDict = new Dictionary<Direction, Door>();
     private void Start()
@@ -28,7 +28,6 @@ public class RoomContentHolder : MonoBehaviour
     public void PlaceDoors()
     {
         RoomContentHolder[] adjacentRooms = mapGenerator.GetAdjacentRooms(roomGridPos);
-        print(adjacentRooms.Length);
 
         foreach (var room in adjacentRooms)
         {
@@ -79,8 +78,8 @@ public class RoomContentHolder : MonoBehaviour
     {
         foreach (var door in doorsDict)
         {
-            Direction dir = door.Key;       // Get the direction (key)
-            Door newDoor = door.Value;      // Get the door (value)
+            Direction dir = door.Key;
+            Door newDoor = door.Value;
 
             Vector2Int offset = Vector2Int.zero;
 
@@ -105,7 +104,6 @@ public class RoomContentHolder : MonoBehaviour
             RoomContentHolder room = mapGenerator.GetRoomByGridPos(roomGridPos + offset);
             if(room.TryGetDoorByDirection(oppoDir, out Door doorDest))
             {
-                print(doorDest);
                 newDoor.SetDoorDestination(doorDest.transform);
             }
         }
