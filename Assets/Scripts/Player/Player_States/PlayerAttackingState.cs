@@ -35,7 +35,7 @@ public class PlayerAttackingState : EntityStateBehaviour
         charRB.velocity = Vector3.zero;
         attackCount++;
         anim.SetInteger("Attack",attackCount);
-        attackInput.action.performed += OnAttack;
+        //attackInput.action.performed += OnAttack;
     }
 
     public override void OnStateUpdate()
@@ -71,6 +71,8 @@ public class PlayerAttackingState : EntityStateBehaviour
     }
     public void AttackEnded()
     {
+        attackCount--;
+        if (attackCount < 1)
         AssociatedStateMachine.SetState(typeof(PlayerMovingState));
     }
 }
