@@ -7,13 +7,17 @@ public class EnemieIdle : EntityStateBehaviour
 {
     [SerializeField] private float minWaitTime, maxWaitTime;
     private ConeOfSight coneOfSightComponent;
-
+    private DetectTarget detectTarget;
     private Coroutine waitTimeRoutine;
+
+    private Transform playerTarget;
+
+    public DetectTarget DetectTarget {set => detectTarget = value; }
 
     public override bool Initialize()
     {
-        coneOfSightComponent = GetComponent<ConeOfSight>();
-        return coneOfSightComponent;
+        //coneOfSightComponent = GetComponent<ConeOfSight>();
+        return true;
     }
 
     public void OnDisable()
@@ -25,11 +29,18 @@ public class EnemieIdle : EntityStateBehaviour
     }
     public void OnEnable()
     {
-        waitTimeRoutine = StartCoroutine(WaitForTimeAndSwitchState());
+
+        playerTarget= detectTarget.Player.transform;
     }
 
     public override void OnStateUpdate()
     {
+        if (playerTarget==null)
+        {
+            playerTarget = detectTarget.Player.transform;
+        }
+        if (Vector3.Distance(playerTarget.position, transform.position)<3)
+            ChasePlayer();
        // throw new NotImplementedException();
     }
 
@@ -41,12 +52,8 @@ public class EnemieIdle : EntityStateBehaviour
         }
         return null;
     }
-    private IEnumerator WaitForTimeAndSwitchState()
+    private void ChasePlayer()
     {
-        float time = UnityEngine.Random.Range(minWaitTime, maxWaitTime);
-
-        yield return new WaitForSeconds(time);
-
-        AssociatedStateMachine.SetState(typeof(EnemieWandering));
+        AssociatedStateMachine.SetState(typeof(EnemieChasing));
     }
 }

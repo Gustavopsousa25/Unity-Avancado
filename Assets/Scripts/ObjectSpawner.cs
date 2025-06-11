@@ -6,7 +6,7 @@ using UnityEngine;
 public class ObjectSpawner : MonoBehaviour
 {
     [SerializeField] private int maxObjSpawned = 5;
-    [SerializeField] private GameObject objectToSpawn;
+    [SerializeField] private EnemieIdle objectToSpawn;
     [SerializeField] private Transform location;
     [SerializeField] private DetectTarget detect;
 
@@ -22,7 +22,9 @@ public class ObjectSpawner : MonoBehaviour
 
         for(int i = 0; i <= objAmount; i++)
         {
-            GameObject newObj = Instantiate(objectToSpawn, new Vector3(Location.position.x /*+ UnityEngine.Random.Range(0,3)*/, 1,Location.position.y /*= UnityEngine.Random.Range(0, 3)*/), quaternion.identity, transform);
+            EnemieIdle newObj = Instantiate(objectToSpawn, new Vector3(Location.position.x /*+ UnityEngine.Random.Range(0,3)*/,Location.position.y+ 2,Location.position.z /*= UnityEngine.Random.Range(0, 3)*/), Quaternion.identity);
+           newObj.DetectTarget = detect;
+            newObj.transform.SetParent(transform,true);
         }
         print(objAmount);
     }

@@ -11,7 +11,7 @@ public class PlayerAttackingState : EntityStateBehaviour
     [SerializeField] private float pushDistance;
     private int attackCount;
     private Collider weaponCollider;
-    private bool attackEnded = false;
+    private bool attackEnded = true;
     private Rigidbody charRB;
     private Animator anim;
     public override bool Initialize()
@@ -26,36 +26,44 @@ public class PlayerAttackingState : EntityStateBehaviour
     public void OnDisable()
     {
         attackInput.action.performed -= OnAttack;
-        //AssociatedStateMachine.SetState(typeof (PlayerMovingState));
+
     }
 
     public void OnEnable()
     {
-        attackEnded = false;
-        charRB.velocity = Vector3.zero;
-        attackCount++;
-        anim.SetInteger("Attack",attackCount);
-        //attackInput.action.performed += OnAttack;
+        attackInput.action.performed += OnAttack;
+        attackInput.action.Enable();
+        OnAttack(new InputAction.CallbackContext());
     }
 
     public override void OnStateUpdate()
     {
+        print(attackEnded);
     }
 
     public override Type StateTransitionCondicion()
     {
-        if (attackEnded)
-        {
-            return typeof(PlayerMovingState);
-        }
         return null;
     }
     public void OnAttack(InputAction.CallbackContext context)
     {
-        attackEnded = false;
-        charRB.velocity = Vector3.zero;
-        attackCount++;
-        anim.SetInteger("Attack", attackCount);
+        print(attackEnded);
+        if (attackEnded)
+        {
+            attackEnded = false;
+            charRB.velocity = Vector3.zero;
+            if (attackCount == 0 || attackCount == 2)
+            {
+                attackCount = 1;
+            }
+            else
+            {
+                attackCount = 2;
+            }
+
+            print(attackCount);
+            anim.SetInteger("Attack", attackCount);
+        }
     }
     public void PushPlayer()
     {
@@ -68,11 +76,13 @@ public class PlayerAttackingState : EntityStateBehaviour
     public void EndAttackPeriod()
     {
         weaponCollider.enabled = false;
+        attackEnded = true;
     }
     public void AttackEnded()
     {
-        attackCount--;
-        if (attackCount < 1)
+        attackCount = 0;
+        anim.SetInteger("Attack", attackCount);
+        print("ended");
         AssociatedStateMachine.SetState(typeof(PlayerMovingState));
     }
 }

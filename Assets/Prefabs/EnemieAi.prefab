@@ -134,10 +134,7 @@ GameObject:
   - component: {fileID: 5961498051794380630}
   - component: {fileID: 4738357380332503829}
   - component: {fileID: 3518655587084541510}
-  - component: {fileID: 8231060309314659716}
   - component: {fileID: 6013065844900064129}
-  - component: {fileID: 2782359549356672086}
-  - component: {fileID: 466818831147342701}
   - component: {fileID: 3186082625745288224}
   m_Layer: 3
   m_Name: EnemieAi
@@ -279,21 +276,6 @@ MonoBehaviour:
   AssociatedStateMachine: {fileID: 5961498051794380630}
   moveSpeedMult: 1.5
   attackRange: 2
---- !u!114 &8231060309314659716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4693981467549515575}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d51f615b603ebba42bb69fa2d1d12f24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AssociatedStateMachine: {fileID: 5961498051794380630}
-  PatrolPath: {fileID: 466818831147342701}
-  moveSpeed: 3
 --- !u!114 &6013065844900064129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,36 +290,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AssociatedStateMachine: {fileID: 5961498051794380630}
   weapon: {fileID: 4307657029915173498}
---- !u!114 &2782359549356672086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4693981467549515575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c39ba65811a99149975c0d28cc199a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewAngle: 45
-  viewRange: 10
---- !u!114 &466818831147342701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4693981467549515575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 718e746a02bb5fe48bddd68a905adef4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PointsOfInterest:
-  - {x: 0, y: 0, z: 0}
-  maxRange: 7
-  minDis: 1
 --- !u!114 &3186082625745288224
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxObjSpawned: 5
-  objectToSpawn: {fileID: 4693981467549515575, guid: aaac9ec7e9e12784a9b1df9015f70e0e,
+  objectToSpawn: {fileID: 4738357380332503829, guid: aaac9ec7e9e12784a9b1df9015f70e0e,
     type: 3}
   location: {fileID: 7509084908063788682}
   detect: {fileID: 6881071114465008261}
