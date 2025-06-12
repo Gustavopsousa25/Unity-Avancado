@@ -38,7 +38,6 @@ public class PlayerAttackingState : EntityStateBehaviour
 
     public override void OnStateUpdate()
     {
-        print(attackEnded);
     }
 
     public override Type StateTransitionCondicion()
