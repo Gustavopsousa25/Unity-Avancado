@@ -8,25 +8,21 @@ public class EnemieAttacking : EntityStateBehaviour
     [SerializeField] private GameObject weapon;
     private Collider weaponCollider;
     private Animator anim;
-    private ConeOfSight coneOfSightComponent;
     public override bool Initialize()
     {
-        coneOfSightComponent = GetComponent<ConeOfSight>();
         anim = GetComponentInChildren<Animator>();
         weaponCollider = weapon.GetComponent<Collider>();
         weaponCollider.enabled = false;
-        return coneOfSightComponent && anim;
+        return anim;
     }
 
     public void OnDisable()
     {
-        coneOfSightComponent.enabled = true;
         weaponCollider.enabled = false;
     }
 
     public void OnEnable()
     {
-        coneOfSightComponent.enabled = false;
         anim.SetTrigger("isAttacking");
     }
 

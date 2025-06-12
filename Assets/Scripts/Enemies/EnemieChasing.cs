@@ -6,19 +6,18 @@ using UnityEngine.AI;
 
 public class EnemieChasing : EntityStateBehaviour
 {
-    [SerializeField] private float moveSpeedMult, attackRange;
+    [SerializeField] private float RunningSpeedMult, attackRange;
+    [SerializeField] private float WalkingMoveSpeed;
     private Transform target;
     private NavMeshAgent agent;
-    private Animator anim;
-    private float WalkingMoveSpeed;
-    private ConeOfSight coneOfSightComponent;
+    private Animator anim; 
+    private EnemieIdle enemieIdle;
 
     public override bool Initialize()
     {
-        target = FindObjectOfType<PlayerMovingState>().transform;
-        WalkingMoveSpeed = GetComponent<EnemieWandering>().MoveSpeed; 
+        enemieIdle = GetComponent<EnemieIdle>();
+        target = enemieIdle.PlayerTarget;
         agent = GetComponent<NavMeshAgent>();
-        coneOfSightComponent = GetComponent<ConeOfSight>();
         anim = GetComponentInChildren<Animator>();
         return target && agent;
     }
@@ -31,18 +30,14 @@ public class EnemieChasing : EntityStateBehaviour
 
     public void OnEnable()
     {
-        coneOfSightComponent.enabled = true;   
-        float ChasingMoveSpeed = WalkingMoveSpeed * moveSpeedMult;
+        float ChasingMoveSpeed = WalkingMoveSpeed * RunningSpeedMult;
         agent.enabled = true;
         agent.speed = ChasingMoveSpeed;
         anim.SetFloat("Walkspeed", MathF.Abs(ChasingMoveSpeed));
-        ChasePlayer();
     }
 
     public override void OnStateUpdate()
     {
-        if (target != null && coneOfSightComponent.HasSeenPlayerThisFrame())
-        {
             ChasePlayer();
 
             if(Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, attackRange))
@@ -52,19 +47,10 @@ public class EnemieChasing : EntityStateBehaviour
                     AssociatedStateMachine.SetState(typeof (EnemieAttacking));
                 }
             }
-        }
     }
 
     public override Type StateTransitionCondicion()
     {
-        if(!coneOfSightComponent.HasSeenPlayerThisFrame() && agent.isStopped)
-        {
-            return typeof(EnemieWandering);
-        }
-        else if (!agent.hasPath)
-        {
-            return typeof(EnemieIdle);
-        }
         return null;
     }
     private void ChasePlayer()

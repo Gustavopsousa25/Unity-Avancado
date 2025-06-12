@@ -259,8 +259,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AssociatedStateMachine: {fileID: 5961498051794380630}
-  minWaitTime: 1
-  maxWaitTime: 5
 --- !u!114 &3518655587084541510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,8 +272,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AssociatedStateMachine: {fileID: 5961498051794380630}
-  moveSpeedMult: 1.5
+  RunningSpeedMult: 1.5
   attackRange: 2
+  WalkingMoveSpeed: 3
 --- !u!114 &6013065844900064129
 MonoBehaviour:
   m_ObjectHideFlags: 0
