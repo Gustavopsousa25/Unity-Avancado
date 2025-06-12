@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class HealthComponent : MonoBehaviour
+public abstract class HealthComponent : MonoBehaviour
 {
     [SerializeField] private int maxHealth;
     public UnityEvent OnDamaged, OnDeath;
     private int currentHealth;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         currentHealth = maxHealth;
     }
-    protected void Die()
+    protected virtual void Die()
     {
         OnDeath.Invoke();
         Destroy(gameObject);
     }
 
-    public void TakeDamage(int dmgValue)
+    public virtual void TakeDamage(int dmgValue)
     {
         if (currentHealth <= 0)
         {

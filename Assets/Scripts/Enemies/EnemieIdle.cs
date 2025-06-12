@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class EnemieIdle : EntityStateBehaviour
 {
+
+    [SerializeField] private float detectRange = 5;
     private DetectTarget detectTarget;
     private Transform playerTarget;
 
@@ -30,7 +32,7 @@ public class EnemieIdle : EntityStateBehaviour
 
     public override Type StateTransitionCondicion()
     {
-        if(Vector3.Distance(playerTarget.position, transform.position) < 5)
+        if(Vector3.Distance(playerTarget.position, transform.position) < detectRange)
         {
             return typeof(EnemieChasing);
         }

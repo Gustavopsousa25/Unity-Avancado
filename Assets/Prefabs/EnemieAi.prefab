@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 4738357380332503829}
   - component: {fileID: 3518655587084541510}
   - component: {fileID: 6013065844900064129}
-  - component: {fileID: 3186082625745288224}
   m_Layer: 3
   m_Name: EnemieAi
   m_TagString: Untagged
@@ -259,6 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AssociatedStateMachine: {fileID: 5961498051794380630}
+  detectRange: 5
 --- !u!114 &3518655587084541510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,25 +289,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AssociatedStateMachine: {fileID: 5961498051794380630}
   weapon: {fileID: 4307657029915173498}
---- !u!114 &3186082625745288224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4693981467549515575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 481aea79bcc742b418ef9051dd6e840e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  OnDamaged:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeath:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &2986509267407190103
 PrefabInstance:
   m_ObjectHideFlags: 0
