@@ -31,7 +31,6 @@ public class EnemieSpawner : ObjectSpawner
     private void RemoveEnemieFromList(GameObject enemie)
     {
         Enemies.Remove(enemie);
-        print(Enemies.Count);
         if (Enemies.Count < 1)
         {
             RoomClear();

@@ -11,17 +11,11 @@ public class BeatPulse : MonoBehaviour
     private RythmManager manager;
     private Vector3 originalScale;
 
-    private void Awake()
-    {
-        manager = FindObjectOfType<RythmManager>(); 
-    }
-    // Start is called before the first frame update
     void Start()
     {
+        manager = RythmManager.Instance;
         originalScale = transform.localScale;    
     }
-
-    // Update is called once per frame
     void Update()
     {
 

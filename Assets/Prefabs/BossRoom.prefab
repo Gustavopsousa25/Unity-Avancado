@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6756031259010705977}
   m_Layer: 0
-  m_Name: Room
+  m_Name: BossRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doorPrefab: {fileID: -7514814824757309631, guid: 4310dbfde880a2f4f82f1b2bae3ffc78,
     type: 3}
-  doorDistance: 20
+  doorDistance: 12
 --- !u!114 &7209489583913099828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b17824b3e084c948918ba899b5a2fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxObjSpawned: 5
+  maxObjSpawned: 1
   objectToSpawn: {fileID: 4738357380332503829, guid: aaac9ec7e9e12784a9b1df9015f70e0e,
     type: 3}
   location: {fileID: 7509084908063788682}

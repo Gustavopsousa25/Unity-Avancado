@@ -3,20 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RythmManager : MonoBehaviour
+public class RythmManager : Singleton<RythmManager>
 {
     [Header("Rythm Settings")]
     [SerializeField] private float bpm = 120f, beatWindow = 0.15f;
 
     private float beatInterval, nextBeatTime;
-    // Start is called before the first frame update
     void Start()
     {
         beatInterval = 60f / bpm;
         nextBeatTime = Time.time + beatInterval;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Time.time >= nextBeatTime)

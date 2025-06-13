@@ -10,15 +10,17 @@ public class BeatInputFeedback : MonoBehaviour
     [SerializeField] private Image targetImage;
     [SerializeField] private float flashDurantion;
 
+    private PlayerAttackingState playerRef;
     private RythmManager manager;
+    private GameManager gameManager;
     private float flashTimer = 0f;
     private bool isFlasing = false;
     private Color originalColor;
     // Start is called before the first frame update
     void Start()
     {
-        manager = FindObjectOfType<RythmManager>();
-        originalColor = targetImage.color;
+        gameManager = GameManager.Instance;
+        manager = RythmManager.Instance;
         mouseInput.action.performed += OnInputperformed;
     }
     private void OnEnable()
@@ -57,9 +59,13 @@ public class BeatInputFeedback : MonoBehaviour
         bool onBeat = manager.IsOnBeat();
 
         if (onBeat)
-            targetImage.color = Color.green;
+        {
+            //destroy obj but the timing whas right
+        }
         else
-            targetImage.color = Color.red;
+        {
+            //destroy bj
+        }
 
         // Start the flash timer so we can revert later
         isFlasing = true;

@@ -5,7 +5,10 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     [SerializeField] private int weaponDamage;
-    private void OnTriggerEnter(Collider other)
+
+    public int WeaponDamage { get => weaponDamage; set => weaponDamage = value; }
+
+    protected virtual void OnTriggerEnter(Collider other)
     {
         HealthComponent health = other.GetComponent<HealthComponent>();
         if (health == GetComponentInParent<HealthComponent>()) 
@@ -14,8 +17,7 @@ public class Weapon : MonoBehaviour
         }
         if (health != null)
         {
-            print(health.gameObject.name+ "  -" + weaponDamage + ("Health") + ("------Current Health:"+ health.GetCurrentHealth()));
-            health.TakeDamage(weaponDamage);
+            health.TakeDamage(WeaponDamage);
         }
 
     }

@@ -10,7 +10,7 @@ public class RoomContentHolder : MonoBehaviour
     private Vector2Int roomGridPos;
     private List<Door> doors = new List<Door>();
     private EnemieSpawner Spawner;
-    [SerializeField] private float doorDistance = 8f;
+    private float doorDistance = 15f;
 
     Dictionary<Direction, Door> doorsDict = new Dictionary<Direction, Door>();
     private void Awake()

@@ -6,9 +6,9 @@ using UnityEngine.Events;
 
 public abstract class HealthComponent : MonoBehaviour
 {
-    [SerializeField] private int maxHealth;
+    [SerializeField] protected int maxHealth;
     public UnityEvent OnDamaged, OnDeath;
-    public Action OnDeathAction;
+    public Action OnDeathAction, OnDamagedAction;
     private int currentHealth;
 
     protected virtual void Awake()
@@ -32,6 +32,7 @@ public abstract class HealthComponent : MonoBehaviour
         {
             currentHealth -= dmgValue;
             OnDamaged?.Invoke();
+            OnDamagedAction?.Invoke();
         }
     }
     public int GetCurrentHealth()

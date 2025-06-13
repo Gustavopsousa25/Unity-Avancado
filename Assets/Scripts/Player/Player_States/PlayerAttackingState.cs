@@ -5,9 +5,12 @@ using UnityEngine.InputSystem;
 public class PlayerAttackingState : EntityStateBehaviour
 {
     [SerializeField] private InputActionReference attackInput;
-    [SerializeField] private GameObject weapon;
+    [SerializeField] private PlayerWeapon weapon;
+    [SerializeField] private float attackDamage;
+    [SerializeField] private float dmgMult = 1.5f;
     [SerializeField] private float pushDistance = 5f;
 
+    private float currentDmgMult;
     private int attackCount = 0;
     private Collider weaponCollider;
     private bool attackEnded = true;
@@ -15,13 +18,16 @@ public class PlayerAttackingState : EntityStateBehaviour
 
     private Rigidbody charRB;
     private Animator anim;
+    private RythmManager rythmManager;
 
     public override bool Initialize()
     {
         charRB = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
         weaponCollider = weapon.GetComponent<Collider>();
+        weapon.WeaponDamage = (int)attackDamage;
         weaponCollider.enabled = false;
+        rythmManager = RythmManager.Instance;
         return charRB != null && anim != null && weaponCollider != null;
     }
 
@@ -34,7 +40,7 @@ public class PlayerAttackingState : EntityStateBehaviour
         attackEnded = true;
         shouldAttackBuffered = false;
 
-        OnAttack(new InputAction.CallbackContext()); // optional: auto-start attack on state enter
+        OnAttack(new InputAction.CallbackContext());
     }
 
     private void OnDisable()
@@ -54,13 +60,17 @@ public class PlayerAttackingState : EntityStateBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        bool onBeat = rythmManager.IsOnBeat();
         if (!attackEnded)
         {
             // Buffer the next attack if pressed during an active attack
             shouldAttackBuffered = true;
             return;
         }
-
+        if (onBeat)
+        {
+            weapon.WeaponDamage = Mathf.RoundToInt(attackDamage * dmgMult);
+        }
         // Start a new attack
         attackEnded = false;
         charRB.velocity = Vector3.zero;
@@ -68,7 +78,7 @@ public class PlayerAttackingState : EntityStateBehaviour
         anim.SetInteger("Attack", attackCount);
         shouldAttackBuffered = false;
 
-        Debug.Log($"Attack {attackCount} started");
+        Debug.Log($"Attack {attackCount} started with "+ weapon.WeaponDamage);
     }
 
     public void PushPlayer()
@@ -85,6 +95,7 @@ public class PlayerAttackingState : EntityStateBehaviour
     public void EndAttackPeriod()
     {
         weaponCollider.enabled = false;
+        weapon.WeaponDamage = (int)attackDamage;
         //attackEnded = true;
         // Don't check buffer here anymore
     }
@@ -95,7 +106,6 @@ public class PlayerAttackingState : EntityStateBehaviour
         Debug.Log($"AttackEnded called. attackCount: {attackCount}, shouldAttackBuffered: {shouldAttackBuffered}");
 
         attackEnded = true;
-
         if (shouldAttackBuffered)
         {
             shouldAttackBuffered = false;
