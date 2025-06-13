@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public abstract class HealthComponent : MonoBehaviour
 {
     [SerializeField] private int maxHealth;
     public UnityEvent OnDamaged, OnDeath;
+    public Action OnDeathAction;
     private int currentHealth;
 
     protected virtual void Awake()
@@ -15,7 +17,8 @@ public abstract class HealthComponent : MonoBehaviour
     }
     protected virtual void Die()
     {
-        OnDeath.Invoke();
+        OnDeath?.Invoke();
+        OnDeathAction?.Invoke();
         Destroy(gameObject);
     }
 
@@ -28,7 +31,7 @@ public abstract class HealthComponent : MonoBehaviour
         else
         {
             currentHealth -= dmgValue;
-            OnDamaged.Invoke();
+            OnDamaged?.Invoke();
         }
     }
     public int GetCurrentHealth()

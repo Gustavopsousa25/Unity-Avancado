@@ -16,6 +16,10 @@ public class RoomContentHolder : MonoBehaviour
     private void Awake()
     {
         Spawner = GetComponent<EnemieSpawner>();
+        if (!Spawner)
+        {
+            return;
+        }
         Spawner.RoomClear += () => EnableDoor();
     }
     private void Start()

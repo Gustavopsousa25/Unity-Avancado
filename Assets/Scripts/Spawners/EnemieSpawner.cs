@@ -22,17 +22,17 @@ public class EnemieSpawner : ObjectSpawner
             EnemieIdle newObj = Instantiate(objectToSpawn, new Vector3(Location.position.x + UnityEngine.Random.Range(0, 10), Location.position.y + 2, Location.position.z + UnityEngine.Random.Range(0, 10)), Quaternion.identity);
             newObj.DetectTarget = detect;
             EnemieHealthComponent enemieHealthComponent = newObj.GetComponent<EnemieHealthComponent>();
-            enemieHealthComponent.OnDeath.AddListener(RemoveEnemieFromList); 
-            newObj.transform.SetParent(transform, true);
             Enemies.Add(newObj.gameObject);
+            enemieHealthComponent.OnDeathAction += () => RemoveEnemieFromList(newObj.gameObject); 
+            newObj.transform.SetParent(transform, true);
             
         }
-        print(Enemies.Count);
     }
-    private void RemoveEnemieFromList()
+    private void RemoveEnemieFromList(GameObject enemie)
     {
-        Enemies.Remove(gameObject);
-        if(Enemies.Count < 1)
+        Enemies.Remove(enemie);
+        print(Enemies.Count);
+        if (Enemies.Count < 1)
         {
             RoomClear();
         }
